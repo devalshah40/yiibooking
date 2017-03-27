@@ -24,10 +24,10 @@
  * @package booster.filters
  */
 class BoosterFilter extends CFilter {
-	
-	protected function preFilter($filterChain) {
-		
-		Yii::app()->getComponent("booster");
-		return true;
-	}
+
+  protected function preFilter($filterChain) {
+
+    Yii::app()->getComponent("booster");
+    return true;
+  }
 }

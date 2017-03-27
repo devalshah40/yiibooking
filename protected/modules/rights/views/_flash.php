@@ -1,23 +1,23 @@
- <div class="flashes">
+<div class="flashes">
 
-	<?php if( Yii::app()->user->hasFlash('RightsSuccess')===true ):?>
+  <?php if (Yii::app()->user->hasFlash('RightsSuccess') === true): ?>
 
-	    <div class="flash success">
+    <div class="flash success">
 
-	        <?php echo Yii::app()->user->getFlash('RightsSuccess'); ?>
+      <?php echo Yii::app()->user->getFlash('RightsSuccess'); ?>
 
-	    </div>
+    </div>
 
-	<?php endif; ?>
+  <?php endif; ?>
 
-	<?php if( Yii::app()->user->hasFlash('RightsError')===true ):?>
+  <?php if (Yii::app()->user->hasFlash('RightsError') === true): ?>
 
-	    <div class="flash error">
+    <div class="flash error">
 
-	        <?php echo Yii::app()->user->getFlash('RightsError'); ?>
+      <?php echo Yii::app()->user->getFlash('RightsError'); ?>
 
-	    </div>
+    </div>
 
-	<?php endif; ?>
+  <?php endif; ?>
 
- </div>
+</div>

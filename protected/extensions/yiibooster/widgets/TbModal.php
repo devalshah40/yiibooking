@@ -16,85 +16,85 @@
  * @package booster.widgets.modals
  */
 class TbModal extends CWidget {
-	
-	/**
-	 * @var boolean indicates whether to automatically open the modal when initialized. Defaults to 'false'.
-	 */
-	public $autoOpen = false;
 
-	/**
-	 * @var boolean indicates whether the modal should use transitions. Defaults to 'true'.
-	 */
-	public $fade = true;
+  /**
+   * @var boolean indicates whether to automatically open the modal when initialized. Defaults to 'false'.
+   */
+  public $autoOpen = false;
 
-	/**
-	 * @var array the options for the Bootstrap Javascript plugin.
-	 */
-	public $options = array();
+  /**
+   * @var boolean indicates whether the modal should use transitions. Defaults to 'true'.
+   */
+  public $fade = true;
 
-	/**
-	 * @var string[] the Javascript event handlers.
-	 */
-	public $events = array();
+  /**
+   * @var array the options for the Bootstrap Javascript plugin.
+   */
+  public $options = array();
 
-	/**
-	 * @var array the HTML attributes for the widget container.
-	 */
-	public $htmlOptions = array();
+  /**
+   * @var string[] the Javascript event handlers.
+   */
+  public $events = array();
 
-	/**
-	 *### .init()
-	 *
-	 * Initializes the widget.
-	 */
-	public function init() {
-		
-		if (!isset($this->htmlOptions['id'])) {
-			$this->htmlOptions['id'] = $this->getId();
-		}
+  /**
+   * @var array the HTML attributes for the widget container.
+   */
+  public $htmlOptions = array();
 
-		if ($this->autoOpen === false && !isset($this->options['show'])) {
-			$this->options['show'] = false;
-		}
+  /**
+   *### .init()
+   *
+   * Initializes the widget.
+   */
+  public function init() {
 
-		$classes = array('modal');
+    if (!isset($this->htmlOptions['id'])) {
+      $this->htmlOptions['id'] = $this->getId();
+    }
 
-		if ($this->fade === true) {
-			$classes[] = 'fade';
-		}
+    if ($this->autoOpen === false && !isset($this->options['show'])) {
+      $this->options['show'] = false;
+    }
 
-		if (!empty($classes)) {
-			$classes = implode(' ', $classes);
-			if (isset($this->htmlOptions['class'])) {
-				$this->htmlOptions['class'] .= ' ' . $classes;
-			} else {
-				$this->htmlOptions['class'] = $classes;
-			}
-		}
-		echo CHtml::openTag('div', $this->htmlOptions);
-		echo '<div class="modal-dialog"><div class="modal-content">';
-	}
+    $classes = array('modal');
 
-	/**
-	 *### .run()
-	 *
-	 * Runs the widget.
-	 */
-	public function run() {
-		
-		$id = $this->htmlOptions['id'];
+    if ($this->fade === true) {
+      $classes[] = 'fade';
+    }
 
-		echo '</div></div></div>';
+    if (!empty($classes)) {
+      $classes = implode(' ', $classes);
+      if (isset($this->htmlOptions['class'])) {
+        $this->htmlOptions['class'] .= ' ' . $classes;
+      } else {
+        $this->htmlOptions['class'] = $classes;
+      }
+    }
+    echo CHtml::openTag('div', $this->htmlOptions);
+    echo '<div class="modal-dialog"><div class="modal-content">';
+  }
 
-		/** @var CClientScript $cs */
-		$cs = Yii::app()->getClientScript();
+  /**
+   *### .run()
+   *
+   * Runs the widget.
+   */
+  public function run() {
 
-		$options = !empty($this->options) ? CJavaScript::encode($this->options) : '';
-		$cs->registerScript(__CLASS__ . '#' . $id, "jQuery('#{$id}').modal({$options});");
+    $id = $this->htmlOptions['id'];
 
-		foreach ($this->events as $name => $handler) {
-			$handler = CJavaScript::encode($handler);
-			$cs->registerScript(__CLASS__ . '#' . $id . '_' . $name, "jQuery('#{$id}').on('{$name}', {$handler});");
-		}
-	}
+    echo '</div></div></div>';
+
+    /** @var CClientScript $cs */
+    $cs = Yii::app()->getClientScript();
+
+    $options = !empty($this->options) ? CJavaScript::encode($this->options) : '';
+    $cs->registerScript(__CLASS__ . '#' . $id, "jQuery('#{$id}').modal({$options});");
+
+    foreach ($this->events as $name => $handler) {
+      $handler = CJavaScript::encode($handler);
+      $cs->registerScript(__CLASS__ . '#' . $id . '_' . $name, "jQuery('#{$id}').on('{$name}', {$handler});");
+    }
+  }
 }

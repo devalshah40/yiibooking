@@ -2,32 +2,31 @@
 
 // uncomment the following to define a path alias
 // Yii::setPathOfAlias('local','path/to/local-folder');\
-Yii::setPathOfAlias('booster', dirname(__FILE__) . DIRECTORY_SEPARATOR . '../extensions/yiibooster');
+//Yii::setPathOfAlias('booster', dirname(__FILE__) . DIRECTORY_SEPARATOR . '../extensions/yiibooster');
 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 return array(
   'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
-  'name' => 'My Web Application',
+  'name' => 'Girnar project',
   'theme' => 'adminlte', // requires you to copy the theme under your themes directory
-
+  'defaultController' => 'site/login',
   // preloading 'log' component
-  'preload' => array('log', 'booster'),
+  'preload' => array('log'
+    //, 'booster'
+  ),
   // autoloading model and component classes
   'import' => array(
     'application.models.*',
     'application.components.*',
-    'application.modules.user.models.*',
-    'application.modules.user.components.*',
-    'application.modules.rights.*',
-    'application.modules.rights.components.*'
+//    'application.modules.user.models.*',
+//    'application.modules.user.components.*',
+//    'application.modules.rights.*',
+//    'application.modules.rights.components.*'
   ),
 
   'modules' => array(
-    'user' => array(
-      'tableUsers' => 'users',
-      'tableProfiles' => 'profiles',
-      'tableProfileFields' => 'profiles_fields',
+    /*'user' => array(
       # encrypting method (php hash function)
       'hash' => 'md5',
 
@@ -57,8 +56,8 @@ return array(
 
       # page after logout
       'returnLogoutUrl' => array('/user/login'),
-    ),
-    'rights' => array(
+    ),*/
+    /*'rights' => array(
 
 
       'superuserName'=>'Admin', // Name of the role with super user privileges.
@@ -77,7 +76,7 @@ return array(
       'cssFile'=>'rights.css', // Style sheet file to use for Rights.
       'install'=>false,  // Whether to enable installer.
       'debug'=>false,
-    ),
+    ),*/
     // uncomment the following to enable the Gii tool
 
     'gii' => array(
@@ -94,14 +93,14 @@ return array(
 
   // application components
   'components' => array(
-    'booster' => array(
+    /*'booster' => array(
       'class' => 'booster.components.Booster',
-    ),
+    ),*/
     'user' => array(
-      'class' => 'RWebUser',
+      'class' => 'CWebUser',
       // enable cookie-based authentication
       'allowAutoLogin' => true,
-      'loginUrl' => array('/user/login'),
+      'loginUrl' => array('/site/login'),
     ),
 
     // uncomment the following to enable URLs in path-format
@@ -117,14 +116,14 @@ return array(
     */
     // database settings are configured in database.php
     'db' => require(dirname(__FILE__) . '/database.php'),
-    'authManager' => array(
-      'class'=>'RDbAuthManager',
-      'connectionID'=>'db',
-      'itemTable'=>'authitem',
-      'itemChildTable'=>'authitemchild',
-      'assignmentTable'=>'authassignment',
-      'rightsTable'=>'rights',
-    ),
+//    'authManager' => array(
+//      'class' => 'CPhpAuthManager',
+//      'connectionID'=>'db',
+//      'itemTable'=>'authitem',
+//      'itemChildTable'=>'authitemchild',
+//      'assignmentTable'=>'authassignment',
+//      'rightsTable'=>'rights',
+//    ),
     'errorHandler' => array(
       // use 'site/error' action to display errors
       'errorAction' => YII_DEBUG ? null : 'site/error',

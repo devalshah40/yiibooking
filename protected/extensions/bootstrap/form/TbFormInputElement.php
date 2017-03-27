@@ -12,22 +12,21 @@
  * Bootstrap form builder input element.
  */
 class TbFormInputElement extends CFormInputElement {
-	/**
-	 * @var array the data for list inputs.
-	 */
-	public $data;
-	/**
-	 * @var array additional HTML options to be rendered in the input tag.
-	 */
-	public $htmlOptions = array();
+  /**
+   * @var array the data for list inputs.
+   */
+  public $data;
+  /**
+   * @var array additional HTML options to be rendered in the input tag.
+   */
+  public $htmlOptions = array();
 
-	/**
-	 * Renders everything for this input.
-	 * @return string the complete rendering result for this input, including label, input field, hint, and error.
-	 */
-    public function render()
-    {
-        $form = $this->getParent();
-        return $form->getActiveFormWidget()->inputRow($this->type, $form->getModel(), $this->name, $this->data, $this->htmlOptions);
-    }
+  /**
+   * Renders everything for this input.
+   * @return string the complete rendering result for this input, including label, input field, hint, and error.
+   */
+  public function render() {
+    $form = $this->getParent();
+    return $form->getActiveFormWidget()->inputRow($this->type, $form->getModel(), $this->name, $this->data, $this->htmlOptions);
+  }
 }
