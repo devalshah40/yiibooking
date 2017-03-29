@@ -23,7 +23,8 @@
         'encodeLabel' => false,
         'items' => array(
           array('label' => Menu::link('MAIN NAVIGITION'), 'itemOptions' => array('class' => 'header')),
-          array('label' => Menu::link('Dashboard', 'fa fa-dashboard'), 'url' => array('site/index'))
+          array('label' => Menu::link('Dashboard', 'fa fa-dashboard'), 'url' => array('site/index')),
+          array('label' => Menu::link('Rooms', 'fa fa-dashboard'), 'url' => array('rooms/admin'))
         ),
       )); ?>
 

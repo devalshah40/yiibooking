@@ -16,6 +16,7 @@ class SiteController extends Controller {
     ));
   }
 
+
   /**
    * Specifies the access control rules.
    * This method is used by the 'accessControl' filter.
@@ -24,17 +25,18 @@ class SiteController extends Controller {
   public function accessRules() {
     return array(
       array('allow',  // allow all users to perform 'index' and 'view' actions
-        'actions' => array('login'),
+        'actions' => array('error', 'login', 'forgot', 'contact'),
         'users' => array('*'),
       ),
       array('allow', // allow authenticated users to access all actions
-        'users'=>array('@'),
+        'users' => array('@'),
       ),
       array('deny',  // deny all users
         'users' => array('*'),
       ),
     );
   }
+
   /**
    * Declares class-based actions.
    */
@@ -121,6 +123,35 @@ class SiteController extends Controller {
     }
     // display the login form
     $this->render('login', array('model' => $model));
+  }
+
+  /**
+   * Displays the forgot password page
+   */
+  public function actionForgot() {
+    $this->layout = '//layouts/login';
+
+    $model = new ForgotForm();
+
+    if (Yii::app()->request->isAjaxRequest) {
+
+      if (Yii::app()->request->getPost('ForgotForm')) {
+        $model->attributes = Yii::app()->request->getPost('ForgotForm');
+        if ($model->validate() && $model->reset()) {
+          echo 'Further instructions have been sent to you email';
+        } else {
+          if ($model->getError('email')) {
+            echo $model->getError('email');
+          } elseif ($model->getError('verifyCode')) {
+            echo $model->getError('verifyCode');
+          }
+        }
+      }
+
+    } else {
+      $this->render('forgot', array('model' => $model));
+    }
+
   }
 
   /**

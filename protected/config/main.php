@@ -10,7 +10,7 @@ return array(
   'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
   'name' => 'Girnar project',
   'theme' => 'adminlte', // requires you to copy the theme under your themes directory
-  'defaultController' => 'site/login',
+  'defaultController' => 'site/index',
   // preloading 'log' component
   'preload' => array('log'
     //, 'booster'
@@ -96,11 +96,16 @@ return array(
     /*'booster' => array(
       'class' => 'booster.components.Booster',
     ),*/
+    'request' => array(
+      'enableCsrfValidation' => true,
+      'enableCookieValidation' => true,
+    ),
     'user' => array(
       'class' => 'CWebUser',
       // enable cookie-based authentication
       'allowAutoLogin' => true,
       'loginUrl' => array('/site/login'),
+      'returnUrl' => array('/site/index'),
     ),
 
     // uncomment the following to enable URLs in path-format
@@ -129,6 +134,26 @@ return array(
       'errorAction' => YII_DEBUG ? null : 'site/error',
     ),
 
+    'clientScript' => array(
+      'coreScriptPosition' => CClientScript::POS_END,
+      'defaultScriptPosition' => CClientScript::POS_END,
+      'defaultScriptFilePosition' => CClientScript::POS_END,
+//      'packages' => require(dirname(__FILE__) . '/../views/assets/packages.php'),
+    ),
+
+    'reCaptcha' => array(
+      'name' => 'reCaptcha',
+      'class' => 'ext.yii-recaptcha.ReCaptcha',
+      'key' => '6LfgeBoUAAAAABLMMdL8vL6mMC23V_38QP28zLbM',
+      'secret' => '6LfgeBoUAAAAAPKm20q04QhWMcV3_qn18ekyVLGJ',
+    ),
+
+    'mailer' => array(
+      'class' => 'ext.yii-mailer.EMailer',
+      'pathViews' => 'application.views.email',
+      'pathLayouts' => 'application.views.email.layouts'
+    ),
+
     'log' => array(
       'class' => 'CLogRouter',
       'routes' => array(
@@ -152,5 +177,6 @@ return array(
   'params' => array(
     // this is used in contact page
     'adminEmail' => 'webmaster@example.com',
+    'replyToEmail' => 'info@example.com',
   ),
 );
