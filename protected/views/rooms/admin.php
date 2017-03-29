@@ -35,18 +35,6 @@ $('.search-form form').submit(function(){
       <!-- /.box-header -->
       <div class="box-body">
 
-        <p>
-          You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-          or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-        </p>
-
-        <?php echo CHtml::link('Advanced Search', '#', array('class' => 'search-button')); ?>
-        <div class="search-form" style="display:none">
-          <?php $this->renderPartial('_search', array(
-            'model' => $model,
-          )); ?>
-        </div><!-- search-form -->
-
         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
           <div class="row">
         <?php $this->widget('zii.widgets.grid.CGridView', array(
@@ -54,13 +42,36 @@ $('.search-form form').submit(function(){
           'htmlOptions' => array('class' => 'col-sm-12'),
           'itemsCssClass' => 'table table-bordered table-striped dataTable',
           'dataProvider' => $model->search(),
+          'enableSorting' => false,
+          'pager' => array(
+            'class' => 'CLinkPager',
+            'hiddenPageCssClass' => 'paginate_button disabled',
+//            'firstPageCssClass' => 'next hidden',
+//            'lastPageCssClass' => 'last hidden',
+            'selectedPageCssClass' => 'active',
+            'internalPageCssClass' => 'paginate_button ',
+            'maxButtonCount'=> 6,
+            'header' => '',
+            'prevPageLabel' => 'Previous',
+            'nextPageLabel' => 'Next',
+            'firstPageLabel'=>'First',
+            'lastPageLabel'=>'Last',
+            'htmlOptions' => array(
+              'class' => 'pagination'
+            )
+          ),
+          'pagerCssClass' => 'dataTables_paginate paging_simple_numbers',
           'filter' => $model,
           'columns' => array(
             'room_name',
             'room_price',
             'room_info',
             'room_capacity',
-            'room_status',
+            array(
+              'name' => 'room_status',
+              'value' => '($data->room_status == 1) ? "Active" : "Inactive"',
+              'filter'=> array(1 => 'Active', 0 => 'Inactive')
+            ),
             /*
             'created_date',
             'updated_date',

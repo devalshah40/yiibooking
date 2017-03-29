@@ -122,10 +122,18 @@ class RoomsController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Rooms');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+//		$dataProvider=new CActiveDataProvider('Rooms');
+//		$this->render('index',array(
+//			'dataProvider'=>$dataProvider,
+//		));
+    $model=new Rooms('search');
+    $model->unsetAttributes();  // clear any default values
+    if(isset($_GET['Rooms']))
+      $model->attributes=$_GET['Rooms'];
+
+    $this->render('admin',array(
+      'model'=>$model,
+    ));
 	}
 
 	/**
