@@ -30,6 +30,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet"
         href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+  <!-- Include SmartWizard CSS -->
+  <link href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/smartwizard/css/smart_wizard.css" rel="stylesheet" type="text/css" />
+
+  <!-- Optional SmartWizard theme -->
+  <link href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/smartwizard/css/smart_wizard_theme_dots.css" rel="stylesheet" type="text/css" />
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -256,6 +261,11 @@ desired effect
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/dist/js/app.min.js"></script>
+<!-- Include jQuery Validator plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
+
+<!-- Include SmartWizard JavaScript source -->
+<script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/smartwizard/js/jquery.smartWizard.min.js"></script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

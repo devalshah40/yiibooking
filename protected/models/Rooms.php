@@ -111,4 +111,8 @@ class Rooms extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+  public static function getRooms(){
+
+  }
 }
