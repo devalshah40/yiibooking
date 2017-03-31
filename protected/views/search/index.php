@@ -4,13 +4,32 @@ $daterange = "$('#daterange').daterangepicker({ locale: {
 }});";
 
 Yii::app()->clientScript->registerScript('daterange', $daterange, CClientScript::POS_READY);
+
+$roomJs = <<<EOD
+var room = 1;
+function education_fields() {
+   room++;
+   var objTo = document.getElementById("education_fields");
+   var divtest = document.createElement("div");
+   divtest.setAttribute("class", "form-group removeclass"+room);
+	 var rdiv = "removeclass"+room;
+   divtest.innerHTML = '<div id="education_fields"><div class="form-group removeclass2">          <div class="col-xs-4">                <input type="text" class="form-control" placeholder="No of rooms">              </div>              <div class="col-xs-7">                <select class="form-control">                  <option>option 1</option>                  <option>option 2</option>                  <option>option 3</option>                  <option>option 4</option>                  <option>option 5</option>                </select>              </div>              <div class="col-xs-1">                <button type="button" class="btn btn-danger btn-flat" onclick="remove_education_fields('+ room +');">-</button>              </div>  <br>  <br>        </div></div>';        objTo.appendChild(divtest);
+}
+function remove_education_fields(rid) {
+	   $(".removeclass"+rid).remove();
+   }
+EOD;
+
+
+Yii::app()->clientScript->registerScript('room',$roomJs, CClientScript::POS_HEAD);
+
 ?>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-5">
 
     <div class="box box-primary">
       <div class="box-header with-border">
-        <h3 class="box-title">Quick Example</h3>
+        <h3 class="box-title">Search Rooms</h3>
       </div>
       <!-- /.box-header -->
       <!-- form start -->
@@ -33,6 +52,7 @@ Yii::app()->clientScript->registerScript('daterange', $daterange, CClientScript:
             <label>Select Rooms:</label>
 
             <div class="input-group">
+              <div id="education_fields"></div>
               <div class="col-xs-4">
                 <input type="text" placeholder="No of rooms" class="form-control">
               </div>
@@ -46,7 +66,7 @@ Yii::app()->clientScript->registerScript('daterange', $daterange, CClientScript:
                 </select>
               </div>
               <div class="col-xs-1">
-                <button type="button" class="btn btn-info btn-flat">+</button>
+                <button type="button" class="btn btn-info btn-flat"  onclick="education_fields();">+</button>
               </div>
             </div>
             <!-- /.input group -->
@@ -61,10 +81,10 @@ Yii::app()->clientScript->registerScript('daterange', $daterange, CClientScript:
     </div>
   </div>
   <!-- /.col -->
-  <div class="col-md-9">
+  <div class="col-md-7">
     <div class="nav-tabs-custom">
       <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#activity" aria-expanded="true">Activity</a></li>
+        <li class="active"><a data-toggle="tab" href="#activity" aria-expanded="true">Search result</a></li>
         <li class=""><a data-toggle="tab" href="#timeline" aria-expanded="false">Timeline</a></li>
         <li class=""><a data-toggle="tab" href="#settings" aria-expanded="false">Settings</a></li>
       </ul>

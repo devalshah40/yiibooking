@@ -62,6 +62,22 @@ class SearchController extends Controller {
   public function actionIndex() {
     // renders the view file 'protected/views/site/index.php'
     // using the default layout 'protected/views/layouts/main.php'
+    $model = new SearchForm('search');
+
+    // if it is ajax validation request
+    if (isset($_POST['ajax']) && $_POST['ajax'] === 'search-form') {
+      echo CActiveForm::validate($model);
+      Yii::app()->end();
+    }
+
+    // collect user input data
+    if (isset($_POST['SearchForm'])) {
+      $model->attributes = $_POST['SearchForm'];
+      // validate user input and redirect to the previous page if valid
+      if ($model->validate() && $model->login())
+        $this->redirect(Yii::app()->user->returnUrl);
+    }
+
     $this->render('index');
   }
 
@@ -103,8 +119,7 @@ class SearchController extends Controller {
   /**
    * Displays the login page
    */
-  public function actionLogin() {
-    $this->layout = '//layouts/login';
+  public function actionSearch() {
 
     $model = new LoginForm;
 
@@ -122,7 +137,7 @@ class SearchController extends Controller {
         $this->redirect(Yii::app()->user->returnUrl);
     }
     // display the login form
-    $this->render('login', array('model' => $model));
+    $this->render('index', array('model' => $model));
   }
 
   /**
