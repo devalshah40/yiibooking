@@ -20,9 +20,9 @@ class ForgotForm extends CFormModel
 		return array(
 
 			array('email, verifyCode', 'required'),
-			array('email', 'email'),
-            array('email', 'exist', 'className'=>'CcUser','attributeName'=>'email','message' => 'Such email {value} is not registered in the system'),
-            array('verifyCode', 'ext.yii-recaptcha.ReCaptchaValidator'),
+      array('email', 'email'),
+      array('email', 'exist', 'className'=>'User','attributeName'=>'email','message' => 'Such email {value} is not registered in the system'),
+      array('verifyCode', 'ext.yii-recaptcha.ReCaptchaValidator'),
 		);
 	}
 
@@ -45,7 +45,7 @@ class ForgotForm extends CFormModel
 	{
         $new_password = Yii::app()->getSecurityManager()->generateRandomString(8,true);
 
-        $user = CcUser::model()->findByAttributes(array('email' => $this->email));
+        $user = User::model()->findByAttributes(array('email' => $this->email));
         $user->password = CPasswordHelper::hashPassword($new_password);
         $user->save();
 

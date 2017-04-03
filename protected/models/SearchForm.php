@@ -88,7 +88,8 @@ class SearchForm extends CFormModel {
     $command = Yii::app()->db->createCommand($sql);
     $command->bindParam(":startDate",$this->startDate,PDO::PARAM_STR);
     $command->bindParam(":endDate",$this->endDate,PDO::PARAM_STR);
-    $command->bindParam(":rooms",implode(',', $this->rooms),PDO::PARAM_STR);
+    $rooms_str = implode(',', $this->rooms);
+    $command->bindParam(":rooms",$rooms_str,PDO::PARAM_STR);
 
     $results = $command->queryAll();
 
