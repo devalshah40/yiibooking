@@ -6,22 +6,36 @@ $daterange = "$('#daterange').daterangepicker({ locale: {
 Yii::app()->clientScript->registerScript('daterange', $daterange, CClientScript::POS_READY);
 
 $roomJs = <<<EOD
-var room = 1;
+var room = 20;
+var rooms_available = $("#rooms_count").val();
 function education_fields() {
+    var rooms_count = $("input:text.form-control.searchrooms").length;
+    if(rooms_count == rooms_available ) {
+      alert("Only "+rooms_available+" roomtypes are available.");
+      return false;
+    }
    room++;
    var objTo = document.getElementById("education_fields");
    var divtest = document.createElement("div");
    divtest.setAttribute("class", "form-group removeclass"+room);
 	 var rdiv = "removeclass"+room;
-   divtest.innerHTML = '<div id="education_fields"><div class="form-group removeclass2">          <div class="col-xs-4">                <input type="text" class="form-control" placeholder="No of rooms">              </div>              <div class="col-xs-7">                <select class="form-control">                  <option>option 1</option>                  <option>option 2</option>                  <option>option 3</option>                  <option>option 4</option>                  <option>option 5</option>                </select>              </div>              <div class="col-xs-1">                <button type="button" class="btn btn-danger btn-flat" onclick="remove_education_fields('+ room +');">-</button>              </div>  <br>  <br>        </div></div>';        objTo.appendChild(divtest);
+   divtest.innerHTML = '<div class="form-group removeclass">          <div class="col-xs-4">                    <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]/g,\'\');" class="form-control searchrooms" placeholder="No of rooms" name="SearchForm[noOfRooms][' + room + ']">              </div>              <div class="col-xs-7"> <select class="form-control" id="search_rooms'+room+'" name="SearchForm[rooms][' + room + ']"></select>            </div>              <div class="col-xs-1">                <button type="button" class="btn btn-danger btn-flat" onclick="remove_education_fields('+ room +');">-</button>              </div>  <br>  <br>        </div>';   
+   var options = $("#search_rooms > option").clone();   
+   divobj = $(divtest);
+   console.log(divobj.find("#search_rooms"+room));
+   divobj.find("#search_rooms"+room).append(options);
+   
+   console.log(divobj.find("#search_rooms"+room));
+   objTo.appendChild(divobj[0]);
 }
 function remove_education_fields(rid) {
 	   $(".removeclass"+rid).remove();
+	   room--;
    }
 EOD;
 
 
-Yii::app()->clientScript->registerScript('room',$roomJs, CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END);
 
 ?>
 <div class="row">
@@ -33,331 +47,279 @@ Yii::app()->clientScript->registerScript('room',$roomJs, CClientScript::POS_HEAD
       </div>
       <!-- /.box-header -->
       <!-- form start -->
-      <form role="form">
-        <div class="box-body">
-          <!-- Date range -->
-          <div class="form-group">
-            <label>Date range:</label>
+      <!-- form start -->
+      <?php $form = $this->beginWidget('CActiveForm', array(
+        'id' => 'rooms-form',
+        'action' => $this->createUrl('/search/index'),
+        // Please note: When you enable ajax validation, make sure the corresponding
+        // controller action is handling ajax validation correctly.
+        // There is a call to performAjaxValidation() commented in generated controller code.
+        // See class documentation of CActiveForm for details on this.
+        'enableAjaxValidation' => true,
+        'enableClientValidation' => true,
+        'htmlOptions' => array('role' => 'form'),
+      )); ?>
+      <?php echo $form->errorSummary($model, null, '', array('class' => 'alert alert-error')); ?>
+      <input type="hidden" id="rooms_count" value="<?php echo count(Rooms::getRooms()); ?>">
+      <div class="box-body">
+        <!-- Date range -->
+        <div class="form-group">
+          <label>Date range:</label>
 
-            <div class="input-group">
-              <div class="input-group-addon">
-                <i class="fa fa-calendar"></i>
-              </div>
-              <input type="text" class="form-control pull-right" id="daterange">
+          <div class="input-group">
+            <div class="input-group-addon">
+              <i class="fa fa-calendar"></i>
             </div>
-            <!-- /.input group -->
+            <?php echo $form->textField($model, 'dateRange', array('class' => 'form-control pull-right', 'id' => "daterange")); ?>
           </div>
-          <!-- /.form group -->
-          <div class="form-group">
-            <label>Select Rooms:</label>
+          <!-- /.input group -->
+        </div>
+        <!-- /.form group -->
+        <div class="form-group">
+          <label>Select Rooms:</label>
 
-            <div class="input-group">
-              <div id="education_fields"></div>
+          <div class="input-group">
+            <?php
+            if (!empty($model->rooms)) {
+              $i = 0;
+              foreach ($model->rooms as $key => $room) {
+                if ($i == 0) {
+                  ?>
+                  <div class="col-xs-4">
+                    <?php echo $form->textField($model, 'noOfRooms[' . $key . ']', array('class' => 'form-control searchrooms', 'placeholder' => "No of rooms")); ?>
+                  </div>
+                  <div class="col-xs-7">
+                    <?php echo $form->dropDownList($model, "rooms[" . $key . "]", Rooms::getRooms(), array(
+                      'class' => "form-control",
+                      'id' => "search_rooms"
+                    )); ?>
+                  </div>
+                  <div class="col-xs-1">
+                    <button type="button" class="btn btn-info btn-flat" onclick="education_fields();">+</button>
+                  </div>
+                  <br>
+                  <br>
+                  <br>
+                <?php } else { ?>
+                  <div class="form-group removeclass<?php echo $key; ?>">
+                    <div class="form-group removeclass">
+                      <div class="col-xs-4">
+                        <?php echo $form->textField($model, 'noOfRooms[' . $key . ']', array('class' => 'form-control searchrooms', 'placeholder' => "No of rooms")); ?>
+                      </div>
+                      <div class="col-xs-7">
+                        <?php echo $form->dropDownList($model, "rooms[" . $key . "]", Rooms::getRooms(), array(
+                          'class' => "form-control",
+                        )); ?>
+                      </div>
+                      <div class="col-xs-1">
+                        <button onclick="remove_education_fields(<?php echo $key; ?>);" class="btn btn-danger btn-flat"
+                                type="button">
+                          -
+                        </button>
+                      </div>
+                      <br> <br>
+                    </div>
+                  </div>
+                  <?php
+                }
+                ?>
+                <?php
+                $i++;
+              }
+            } else {
+              ?>
               <div class="col-xs-4">
-                <input type="text" placeholder="No of rooms" class="form-control">
+                <?php echo $form->textField($model, 'noOfRooms[0]', array('class' => 'form-control searchrooms', 'placeholder' => "No of rooms")); ?>
               </div>
               <div class="col-xs-7">
-                <select class="form-control">
-                  <option>option 1</option>
-                  <option>option 2</option>
-                  <option>option 3</option>
-                  <option>option 4</option>
-                  <option>option 5</option>
-                </select>
+                <?php echo $form->dropDownList($model, "rooms[0]", Rooms::getRooms(), array(
+                  'class' => "form-control",
+                  'id' => "search_rooms"
+                )); ?>
               </div>
               <div class="col-xs-1">
-                <button type="button" class="btn btn-info btn-flat"  onclick="education_fields();">+</button>
+                <button type="button" class="btn btn-info btn-flat" onclick="education_fields();">+</button>
               </div>
-            </div>
-            <!-- /.input group -->
-          </div>
-        </div>
-        <!-- /.box-body -->
+              <br>
+              <br>
+              <br>
 
-        <div class="box-footer">
-          <button class="btn btn-primary" type="submit">Submit</button>
+              <?php
+            }
+            ?>
+            <div id="education_fields"></div>
+          </div>
+          <!-- /.input group -->
         </div>
-      </form>
+      </div>
+      <!-- /.box-body -->
+
+      <div class="box-footer">
+        <button class="btn btn-primary" type="submit">Search</button>
+      </div>
     </div>
   </div>
   <!-- /.col -->
   <div class="col-md-7">
     <div class="nav-tabs-custom">
       <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#activity" aria-expanded="true">Search result</a></li>
-        <li class=""><a data-toggle="tab" href="#timeline" aria-expanded="false">Timeline</a></li>
-        <li class=""><a data-toggle="tab" href="#settings" aria-expanded="false">Settings</a></li>
+        <?php if(empty($model->book_button)) { ?>
+          <li class="active"><a data-toggle="tab" href="#activity" aria-expanded="true">Search result</a></li>
+          <li class=""><a href="#booking_form" class="disabled" aria-expanded="false" >Booking form</a></li>
+        <?php }else { ?>
+          <li class=""><a data-toggle="tab" href="#activity" aria-expanded="false">Search result</a></li>
+          <li class="active"><a href="#booking_form" data-toggle="tab" aria-expanded="true" >Booking form</a></li>
+        <?php } ?>
+
       </ul>
       <div class="tab-content">
-        <div id="activity" class="tab-pane active">
-          <!-- Post -->
-          <div class="post">
-            <div class="user-block">
-              <img alt="user image" src="../../dist/img/user1-128x128.jpg" class="img-circle img-bordered-sm">
-              <span class="username">
-                          <a href="#">Jonathan Burke Jr.</a>
-                          <a class="pull-right btn-box-tool" href="#"><i class="fa fa-times"></i></a>
-                        </span>
-              <span class="description">Shared publicly - 7:30 PM today</span>
-            </div>
-            <!-- /.user-block -->
-            <p>
-              Lorem ipsum represents a long-held tradition for designers,
-              typographers and the like. Some people hate it and argue for
-              its demise, but others ignore the hate as they create awesome
-              tools to help create filler text for everyone from bacon lovers
-              to Charlie Sheen fans.
-            </p>
-            <ul class="list-inline">
-              <li><a class="link-black text-sm" href="#"><i class="fa fa-share margin-r-5"></i> Share</a></li>
-              <li><a class="link-black text-sm" href="#"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
-              </li>
-              <li class="pull-right">
-                <a class="link-black text-sm" href="#"><i class="fa fa-comments-o margin-r-5"></i> Comments
-                  (5)</a></li>
-            </ul>
-
-            <input type="text" placeholder="Type a comment" class="form-control input-sm">
-          </div>
-          <!-- /.post -->
-
-          <!-- Post -->
-          <div class="post clearfix">
-            <div class="user-block">
-              <img alt="User Image" src="../../dist/img/user7-128x128.jpg" class="img-circle img-bordered-sm">
-              <span class="username">
-                          <a href="#">Sarah Ross</a>
-                          <a class="pull-right btn-box-tool" href="#"><i class="fa fa-times"></i></a>
-                        </span>
-              <span class="description">Sent you a message - 3 days ago</span>
-            </div>
-            <!-- /.user-block -->
-            <p>
-              Lorem ipsum represents a long-held tradition for designers,
-              typographers and the like. Some people hate it and argue for
-              its demise, but others ignore the hate as they create awesome
-              tools to help create filler text for everyone from bacon lovers
-              to Charlie Sheen fans.
-            </p>
-
-            <form class="form-horizontal">
-              <div class="form-group margin-bottom-none">
-                <div class="col-sm-9">
-                  <input placeholder="Response" class="form-control input-sm">
-                </div>
-                <div class="col-sm-3">
-                  <button class="btn btn-danger pull-right btn-block btn-sm" type="submit">Send</button>
-                </div>
+        <div id="activity" class="tab-pane <?php echo empty($model->book_button) ? 'active' : ''; ?>">
+          <?php
+          if (!empty($model->bookedRooms)) {
+            foreach ($model->bookedRooms as $bookedRoom) {
+              $is_sucess = ($bookedRoom['price'] > 0) ? 'box-success' : 'box-danger';
+              ?>
+              <div class="box box-solid <?php echo $is_sucess; ?>">
+                <div class="box-header">
+                  <h3
+                    class="box-title"><?php echo $bookedRoom['searched_rooms']; ?> <?php echo $bookedRoom['room_name']; ?></h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <?php if (empty($bookedRoom['price'])) {
+                    if ($bookedRoom['available_rooms'] > 0) {
+                      ?>
+                      Only <?php echo $bookedRoom['available_rooms']; ?> rooms available to book.
+                    <?php } else { ?>
+                      No rooms are available on these days.
+                    <?php }
+                  } else { ?>
+                    Price :- ₹<?php echo $bookedRoom['price']; ?>
+                  <?php } ?>
+                </div><!-- /.box-body -->
               </div>
-            </form>
-          </div>
-          <!-- /.post -->
-
-          <!-- Post -->
-          <div class="post">
-            <div class="user-block">
-              <img alt="User Image" src="../../dist/img/user6-128x128.jpg" class="img-circle img-bordered-sm">
-              <span class="username">
-                          <a href="#">Adam Jones</a>
-                          <a class="pull-right btn-box-tool" href="#"><i class="fa fa-times"></i></a>
-                        </span>
-              <span class="description">Posted 5 photos - 5 days ago</span>
+              <?php
+            }
+          ?>
+          <div class="box-body">
+            <div class="col-sm-9">
+              <span
+                class="description"><strong>Total price :- </strong> ₹<?php echo $model->total_booking_price; ?></span>
             </div>
-            <!-- /.user-block -->
-            <div class="row margin-bottom">
-              <div class="col-sm-6">
-                <img alt="Photo" src="../../dist/img/photo1.png" class="img-responsive">
-              </div>
-              <!-- /.col -->
-              <div class="col-sm-6">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <img alt="Photo" src="../../dist/img/photo2.png" class="img-responsive">
-                    <br>
-                    <img alt="Photo" src="../../dist/img/photo3.jpg" class="img-responsive">
-                  </div>
-                  <!-- /.col -->
-                  <div class="col-sm-6">
-                    <img alt="Photo" src="../../dist/img/photo4.jpg" class="img-responsive">
-                    <br>
-                    <img alt="Photo" src="../../dist/img/photo1.png" class="img-responsive">
-                  </div>
-                  <!-- /.col -->
-                </div>
-                <!-- /.row -->
-              </div>
-              <!-- /.col -->
+            <div class="col-sm-3">
+              <button class="btn btn-block btn-primary <?php echo (!$model->is_bookable) ? "disabled" : ''; ?>"
+                      type="<?php echo (!$model->is_bookable) ? "button" : 'submit'; ?>" name="SearchForm[book_button]" value="book">Book
+              </button>
             </div>
-            <!-- /.row -->
-
-            <ul class="list-inline">
-              <li><a class="link-black text-sm" href="#"><i class="fa fa-share margin-r-5"></i> Share</a></li>
-              <li><a class="link-black text-sm" href="#"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
-              </li>
-              <li class="pull-right">
-                <a class="link-black text-sm" href="#"><i class="fa fa-comments-o margin-r-5"></i> Comments
-                  (5)</a></li>
-            </ul>
-
-            <input type="text" placeholder="Type a comment" class="form-control input-sm">
           </div>
-          <!-- /.post -->
+         <?php  } ?>
+          <?php $this->endWidget(); ?>
         </div>
         <!-- /.tab-pane -->
-        <div id="timeline" class="tab-pane">
-          <!-- The timeline -->
-          <ul class="timeline timeline-inverse">
-            <!-- timeline time label -->
-            <li class="time-label">
-                        <span class="bg-red">
-                          10 Feb. 2014
-                        </span>
-            </li>
-            <!-- /.timeline-label -->
-            <!-- timeline item -->
-            <li>
-              <i class="fa fa-envelope bg-blue"></i>
+        <div id="booking_form" class="tab-pane <?php echo !empty($model->book_button) ? 'active' : ''; ?>">
+          <!-- form start -->
+          <?php $bookingForm = $this->beginWidget('CActiveForm', array(
+            'id' => 'booking-form',
+            'action' => $this->createUrl('/search/booking'),
+            'enableAjaxValidation' => true,
+            'enableClientValidation' => true,
+            'htmlOptions' => array('role' => 'form','class' => 'form-horizontal'),
+          )); ?>
 
-              <div class="timeline-item">
-                <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
-                <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                <div class="timeline-body">
-                  Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                  weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                  jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                  quora plaxo ideeli hulu weebly balihoo...
-                </div>
-                <div class="timeline-footer">
-                  <a class="btn btn-primary btn-xs">Read more</a>
-                  <a class="btn btn-danger btn-xs">Delete</a>
-                </div>
+          <?php echo $form->errorSummary($bookingModel, null, '', array('class' => 'alert alert-error')); ?>
+          <div class="form-group">
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Yatrik Name</label>
+              <div class="col-sm-10">
+                <?php echo $bookingForm->textField($bookingModel,'yatrik_name', array('class' => 'form-control', 'placeholder' => "Yatrik Name")); ?>
               </div>
-            </li>
-            <!-- END timeline item -->
-            <!-- timeline item -->
-            <li>
-              <i class="fa fa-user bg-aqua"></i>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Address</label>
 
-              <div class="timeline-item">
-                <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-
-                <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
-                </h3>
+              <div class="col-sm-10">
+                <?php echo $bookingForm->textArea($bookingModel,'address', array('class' => 'form-control', 'placeholder' => "Address")); ?>
               </div>
-            </li>
-            <!-- END timeline item -->
-            <!-- timeline item -->
-            <li>
-              <i class="fa fa-comments bg-yellow"></i>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">City</label>
 
-              <div class="timeline-item">
-                <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-
-                <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                <div class="timeline-body">
-                  Take me to your leader!
-                  Switzerland is small and neutral!
-                  We are more like Germany, ambitious and misunderstood!
-                </div>
-                <div class="timeline-footer">
-                  <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                </div>
+              <div class="col-sm-10">
+                <?php echo $bookingForm->textField($bookingModel,'city', array('class' => 'form-control', 'placeholder' => "Ahmedabad")); ?>
               </div>
-            </li>
-            <!-- END timeline item -->
-            <!-- timeline time label -->
-            <li class="time-label">
-                        <span class="bg-green">
-                          3 Jan. 2014
-                        </span>
-            </li>
-            <!-- /.timeline-label -->
-            <!-- timeline item -->
-            <li>
-              <i class="fa fa-camera bg-purple"></i>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Pincode</label>
 
-              <div class="timeline-item">
-                <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-                <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                <div class="timeline-body">
-                  <img class="margin" alt="..." src="http://placehold.it/150x100">
-                  <img class="margin" alt="..." src="http://placehold.it/150x100">
-                  <img class="margin" alt="..." src="http://placehold.it/150x100">
-                  <img class="margin" alt="..." src="http://placehold.it/150x100">
-                </div>
+              <div class="col-sm-10">
+                <?php echo $bookingForm->textField($bookingModel,'pincode', array('class' => 'form-control', 'placeholder' => "380005")); ?>
               </div>
-            </li>
-            <!-- END timeline item -->
-            <li>
-              <i class="fa fa-clock-o bg-gray"></i>
-            </li>
-          </ul>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Mobile no</label>
+
+              <div class="col-sm-10">
+                <?php echo $bookingForm->textField($bookingModel,'mobile_no', array('class' => 'form-control', 'placeholder' => "94268XXXXX")); ?>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Email</label>
+
+              <div class="col-sm-10">
+                <?php echo $bookingForm->textField($bookingModel,'email', array('class' => 'form-control', 'placeholder' => "Email-ID")); ?>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Receipt No</label>
+              <div class="col-sm-10">
+                <?php echo $bookingForm->textField($bookingModel,'receipt_no', array('class' => 'form-control', 'placeholder' => "Receipt no")); ?>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Deposit amount</label>
+              <div class="col-sm-10">
+                <?php echo $bookingForm->textField($bookingModel,'deposit_amount', array('class' => 'form-control', 'placeholder' => "Deposit amount")); ?>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Actual Amount</label>
+              <div class="col-sm-10">
+                <?php echo $bookingForm->textField($bookingModel,'actual_amount', array('class' => 'form-control', 'readOnly' => "readOnly", 'value' => $model->total_booking_price)); ?>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Notes</label>
+              <div class="col-sm-10">
+                <?php echo $bookingForm->textArea($bookingModel,'notes', array('class' => 'form-control', 'placeholder' => "Notes")); ?>
+              </div>
+            </div>
+            <?php
+              echo $bookingForm->hiddenField($bookingModel,'dateRange', array('value' => $model->dateRange));
+              echo $bookingForm->hiddenField($bookingModel,'arrival_date', array('value' => $model->startDate));
+              echo $bookingForm->hiddenField($bookingModel,'departure_date', array('value' => $model->endDate));
+              if (!empty($model->rooms)) {
+                foreach ($model->rooms as $key => $room) {
+                  echo $bookingForm->hiddenField($bookingModel, 'noOfRooms[' . $key . ']', array('value' => $model->noOfRooms[$key]));
+                  echo $bookingForm->hiddenField($bookingModel, 'rooms[' . $key . ']', array('value' => $model->rooms[$key]));
+                }
+              }
+            ?>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-block btn-primary" type="submit" name="Booking[book_button]" value="book">Book
+                </button>
+              </div>
+            </div>
+
+            <?php $this->endWidget(); ?>
+          </div>
         </div>
         <!-- /.tab-pane -->
-
-        <div id="settings" class="tab-pane">
-          <form class="form-horizontal">
-            <div class="form-group">
-              <label class="col-sm-2 control-label" for="inputName">Name</label>
-
-              <div class="col-sm-10">
-                <input type="email" placeholder="Name" id="inputName" class="form-control">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label" for="inputEmail">Email</label>
-
-              <div class="col-sm-10">
-                <input type="email" placeholder="Email" id="inputEmail" class="form-control">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label" for="inputName">Name</label>
-
-              <div class="col-sm-10">
-                <input type="text" placeholder="Name" id="inputName" class="form-control">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label" for="inputExperience">Experience</label>
-
-              <div class="col-sm-10">
-                <textarea placeholder="Experience" id="inputExperience" class="form-control"></textarea>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label" for="inputSkills">Skills</label>
-
-              <div class="col-sm-10">
-                <input type="text" placeholder="Skills" id="inputSkills" class="form-control">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-offset-2 col-sm-10">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-offset-2 col-sm-10">
-                <button class="btn btn-danger" type="submit">Submit</button>
-              </div>
-            </div>
-          </form>
-        </div>
         <!-- /.tab-pane -->
       </div>
       <!-- /.tab-content -->
     </div>
     <!-- /.nav-tabs-custom -->
   </div>
+
   <!-- /.col -->
 </div>

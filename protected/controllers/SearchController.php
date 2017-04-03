@@ -62,7 +62,8 @@ class SearchController extends Controller {
   public function actionIndex() {
     // renders the view file 'protected/views/site/index.php'
     // using the default layout 'protected/views/layouts/main.php'
-    $model = new SearchForm('search');
+    $model = new SearchForm();
+    $booking = new Booking();
 
     // if it is ajax validation request
     if (isset($_POST['ajax']) && $_POST['ajax'] === 'search-form') {
@@ -74,11 +75,38 @@ class SearchController extends Controller {
     if (isset($_POST['SearchForm'])) {
       $model->attributes = $_POST['SearchForm'];
       // validate user input and redirect to the previous page if valid
-      if ($model->validate() && $model->login())
-        $this->redirect(Yii::app()->user->returnUrl);
+      if ($model->validate() && $model->findRooms()) {
+      }
     }
 
-    $this->render('index');
+    $this->render('index', array('model' => $model,'bookingModel' => $booking));
+  }
+
+
+  /**
+   * This is the default 'index' action that is invoked
+   * when an action is not explicitly requested by users.
+   */
+  public function actionBooking() {
+    // renders the view file 'protected/views/site/index.php'
+    // using the default layout 'protected/views/layouts/main.php'
+    $model = new SearchForm();
+    $booking = new Booking();
+
+    // collect user input data
+    if (isset($_POST['Booking'])) {
+      $model->attributes = $_POST['Booking'];
+      $booking->attributes = $_POST['Booking'];
+//      var_dump($_POST['Booking']);
+//      var_dump($model);
+//      var_dump($booking);
+//      exit;
+      // validate user input and redirect to the previous page if valid
+      if ($model->validate() && $model->findRooms() && !$model->hasErrors() && $booking->validate() && $booking->saveBooking()) {
+      }
+    }
+
+    $this->render('index', array('model' => $model,'bookingModel' => $booking));
   }
 
   /**

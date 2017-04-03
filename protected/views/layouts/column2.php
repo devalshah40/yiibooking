@@ -24,6 +24,7 @@
         'items' => array(
           array('label' => Menu::link('MAIN NAVIGITION'), 'itemOptions' => array('class' => 'header')),
           array('label' => Menu::link('Dashboard', 'fa fa-dashboard'), 'url' => array('site/index')),
+          array('label' => Menu::link('Bookings', 'fa fa-dashboard'), 'url' => array('booking/admin')),
           array('label' => Menu::link('Rooms', 'fa fa-dashboard'), 'url' => array('rooms/index')),
           array('label' => Menu::link('Search', 'fa fa-dashboard'), 'url' => array('search/index'))
         ),
