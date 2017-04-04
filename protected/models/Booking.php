@@ -85,7 +85,10 @@ class Booking extends CActiveRecord {
   public function relations() {
     // NOTE: you may need to adjust the relation name and the related
     // class name for the relations automatically generated below.
-    return array();
+    return array(
+      'created' => array(self::HAS_ONE, 'User', 'created_by'),
+      'updated' => array(self::HAS_ONE, 'User', 'updated_by'),
+    );
   }
 
   /**
@@ -93,7 +96,7 @@ class Booking extends CActiveRecord {
    */
   public function attributeLabels() {
     return array(
-      'id' => 'ID',
+      'id' => 'Booking ID',
       'yatrik_name' => 'Yatrik Name',
       'address' => 'Address',
       'city' => 'City',
@@ -229,22 +232,22 @@ class Booking extends CActiveRecord {
               :updated_by
             )";
       $command = $connection->createCommand($sql);
-      $command->bindParam(":yatrik_name", $this->yatrik_name ,PDO::PARAM_STR);
-      $command->bindParam(':address' , $this->address,PDO::PARAM_STR);
-      $command->bindParam(':city' , $this->city,PDO::PARAM_STR);
-      $command->bindParam(':pincode' , $this->pincode,PDO::PARAM_INT);
-      $command->bindParam(':mobile_no' , $this->mobile_no,PDO::PARAM_INT);
-      $command->bindParam(':email' , $this->email,PDO::PARAM_STR);
-      $command->bindParam(':arrival_date' , $this->arrival_date,PDO::PARAM_STR);
-      $command->bindParam(':departure_date' , $this->departure_date,PDO::PARAM_STR);
-      $command->bindParam(':receipt_no' , $this->receipt_no,PDO::PARAM_STR);
-      $command->bindParam(':deposit_amount' , $this->deposit_amount,PDO::PARAM_INT);
-      $command->bindParam(':actual_amount' , $this->actual_amount,PDO::PARAM_INT);
-      $command->bindParam(':notes' , $this->notes,PDO::PARAM_STR);
-      $command->bindParam(':created_date' , date('Y-m-d'),PDO::PARAM_STR);
-      $command->bindParam(':created_by' , $loginUserID, PDO::PARAM_INT);
-      $command->bindParam(':updated_date' , date('Y-m-d'),PDO::PARAM_STR);
-      $command->bindParam(':updated_by' , $loginUserID,PDO::PARAM_INT);
+      $command->bindParam(":yatrik_name", $this->yatrik_name, PDO::PARAM_STR);
+      $command->bindParam(':address', $this->address, PDO::PARAM_STR);
+      $command->bindParam(':city', $this->city, PDO::PARAM_STR);
+      $command->bindParam(':pincode', $this->pincode, PDO::PARAM_INT);
+      $command->bindParam(':mobile_no', $this->mobile_no, PDO::PARAM_INT);
+      $command->bindParam(':email', $this->email, PDO::PARAM_STR);
+      $command->bindParam(':arrival_date', $this->arrival_date, PDO::PARAM_STR);
+      $command->bindParam(':departure_date', $this->departure_date, PDO::PARAM_STR);
+      $command->bindParam(':receipt_no', $this->receipt_no, PDO::PARAM_STR);
+      $command->bindParam(':deposit_amount', $this->deposit_amount, PDO::PARAM_INT);
+      $command->bindParam(':actual_amount', $this->actual_amount, PDO::PARAM_INT);
+      $command->bindParam(':notes', $this->notes, PDO::PARAM_STR);
+      $command->bindParam(':created_date', date('Y-m-d'), PDO::PARAM_STR);
+      $command->bindParam(':created_by', $loginUserID, PDO::PARAM_INT);
+      $command->bindParam(':updated_date', date('Y-m-d'), PDO::PARAM_STR);
+      $command->bindParam(':updated_by', $loginUserID, PDO::PARAM_INT);
       $command->execute();
 
       $booking_id = $connection->getLastInsertID();

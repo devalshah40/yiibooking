@@ -7,6 +7,8 @@
  * @property integer $id
  * @property string $username
  * @property string $password
+ * @property string $first_name
+ * @property string $last_name
  * @property string $email
  * @property string $location
  * @property string $mobile_no
@@ -36,7 +38,7 @@ class User extends CActiveRecord
 			array('status', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>20),
 			array('password, email', 'length', 'max'=>128),
-			array('location, mobile_no', 'length', 'max'=>255),
+      array('first_name, last_name, location, mobile_no', 'length', 'max'=>255),
 			array('lastvisit_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -64,6 +66,8 @@ class User extends CActiveRecord
 			'id' => 'ID',
 			'username' => 'Username',
 			'password' => 'Password',
+      'first_name' => 'First Name',
+      'last_name' => 'Last Name',
 			'email' => 'Email',
 			'location' => 'Location',
 			'mobile_no' => 'Mobile No',
@@ -73,7 +77,10 @@ class User extends CActiveRecord
 		);
 	}
 
-	/**
+  public function getName() {
+    return $this->first_name. " ". $this->last_name;
+  }
+    /**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *
 	 * Typical usecase:

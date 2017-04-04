@@ -153,6 +153,7 @@ class BookingController extends Controller
 	public function loadModel($id)
 	{
 		$model=Booking::model()->findByPk($id);
+    var_dump($model->created);exit;
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;

@@ -9,6 +9,7 @@ class SearchForm extends CFormModel {
   public $dateRange;
   public $startDate;
   public $endDate;
+  public $noOfDays;
   public $noOfRooms;
   public $rooms;
   public $searchRooms;
@@ -24,9 +25,10 @@ class SearchForm extends CFormModel {
     $this->startDate = date('Y-m-d', strtotime($this->startDate));
     $this->endDate  = date('Y-m-d', strtotime($this->endDate));
 
-    $this->startDate = '2017-03-29';
-    $this->endDate = '2017-03-31';
+    $date1 = new DateTime($this->startDate);
+    $date2 = new DateTime($this->endDate);
 
+    $this->noOfDays = $date2->diff($date1)->format("%a");
 //    foreach ($this->rooms as $key => $room) {
 //      $this->searchRooms[$room] = $this->noOfRooms[$key];
 //    }
@@ -123,7 +125,7 @@ class SearchForm extends CFormModel {
       }
     }
     $this->is_bookable = $is_bookable;
-    $this->total_booking_price = $total_booking_price;
+    $this->total_booking_price = $total_booking_price * $this->noOfDays;
     $this->bookedRooms = $booked_rooms;
 
     if(!$this->is_bookable) {
