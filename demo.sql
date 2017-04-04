@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS `booking`;
 CREATE TABLE `booking` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `yatrik_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `address` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `address` text COLLATE utf8_unicode_ci NOT NULL,
   `city` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `pincode` char(7) COLLATE utf8_unicode_ci NOT NULL,
   `mobile_no` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -35,9 +35,11 @@ CREATE TABLE `booking` (
   `updated_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*Data for the table `booking` */
+
+insert  into `booking`(`id`,`yatrik_name`,`address`,`city`,`pincode`,`mobile_no`,`email`,`arrival_date`,`departure_date`,`receipt_no`,`deposit_amount`,`actual_amount`,`notes`,`created_date`,`created_by`,`updated_date`,`updated_by`) values (1,'Deval Shah','10-Trimurti apprtment','Ahmedabad','380005','7874734209','devalshah21@gmail.com','2017-03-29','2017-03-31','526452','450.00','800.00','FFDSF','2017-04-03 22:23:48',0,'2017-03-29 22:43:02',1),(2,'Dipan Shah','10-Trimurti apprtment','Ahmedabad','380005','7874734209','devalshah21@gmail.com','2017-03-29','2017-03-31','526452','450.00','800.00','FFDSF','2017-04-03 22:23:47',0,'2017-03-29 22:43:02',1),(3,'Hiral Shah','Girivihar','Ahmedabad','380002','8747342097','devalshah21@gmail.com','2017-04-03','2017-04-05','6958','800.00','800.00','Did booking','2017-04-03 00:00:00',1,'2017-04-03 00:00:00',1);
 
 /*Table structure for table `booking_details` */
 
@@ -49,9 +51,11 @@ CREATE TABLE `booking_details` (
   `room_id` int(11) DEFAULT NULL,
   `number_count` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*Data for the table `booking_details` */
+
+insert  into `booking_details`(`id`,`booking_id`,`room_id`,`number_count`) values (1,1,1,7),(2,1,2,2),(3,2,1,2),(4,3,1,1);
 
 /*Table structure for table `rooms` */
 
@@ -63,6 +67,7 @@ CREATE TABLE `rooms` (
   `room_price` decimal(10,2) NOT NULL DEFAULT '0.00',
   `room_info` text COLLATE utf8_unicode_ci,
   `room_capacity` int(11) NOT NULL DEFAULT '0',
+  `room_count` int(11) NOT NULL DEFAULT '1',
   `room_status` tinyint(1) DEFAULT '1',
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -71,7 +76,7 @@ CREATE TABLE `rooms` (
 
 /*Data for the table `rooms` */
 
-insert  into `rooms`(`id`,`room_name`,`room_price`,`room_info`,`room_capacity`,`room_status`,`created_date`,`updated_date`) values (1,'AC room','300.00','AC rooms',4,1,'2017-03-27 22:39:55','2017-03-27 22:39:55'),(2,'Non AC room','300.00','AC rooms',4,1,'2017-03-27 22:39:55','2017-03-27 22:39:55'),(3,'Non AC room','300.00','AC rooms',4,1,'2017-03-27 22:39:55','2017-03-27 22:39:55'),(4,'Non AC room','300.00','AC rooms',4,1,'2017-03-27 22:39:55','2017-03-27 22:39:55'),(5,'Non AC room','300.00','AC rooms',4,1,'2017-03-27 22:39:55','2017-03-27 22:39:55');
+insert  into `rooms`(`id`,`room_name`,`room_price`,`room_info`,`room_capacity`,`room_count`,`room_status`,`created_date`,`updated_date`) values (1,'AC room','400.00','AC rooms',4,20,1,'2017-03-27 22:39:55','2017-03-27 22:39:55'),(2,'Non AC room','300.00','AC rooms',4,20,1,'2017-03-27 22:39:55','2017-03-27 22:39:55'),(3,'Pravachan Hall','300.00','AC rooms',50,1,1,'2017-03-27 22:39:55','2017-03-27 22:39:55'),(4,'Bhojanshala','100.00','AC rooms',50,1,1,'2017-03-27 22:39:55','2017-03-27 22:39:55'),(5,'General hall','200.00','AC rooms',150,1,1,'2017-03-27 22:39:55','2017-03-27 22:39:55');
 
 /*Table structure for table `users` */
 
