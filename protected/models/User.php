@@ -15,6 +15,10 @@
  * @property string $create_at
  * @property string $lastvisit_at
  * @property integer $status
+ *
+ * The followings are the available model relations:
+ * @property Booking[] $bookingsCreated
+ * @property Booking[] $bookingsUpdated
  */
 class User extends CActiveRecord
 {
@@ -54,6 +58,8 @@ class User extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+      'booking_created' => array(self::HAS_MANY, 'Booking', 'created_by'),
+      'booking_updated' => array(self::HAS_MANY, 'Booking', 'updated_by'),
 		);
 	}
 

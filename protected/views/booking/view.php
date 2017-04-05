@@ -26,7 +26,7 @@ $this->breadcrumbs = array(
 
     <div class="box">
       <div class="box-header">
-        <h3 class="box-title">Booking Details #<?php echo $model->id; ?></h3>
+        <h3 class="box-title">Receipt #<?php echo $model->id; ?></h3>
       </div>
       <!-- /.box-header -->
       <div class="box-body no-padding">
@@ -138,7 +138,7 @@ $this->breadcrumbs = array(
           <tr>
             <th style="width: 150px"><?php echo CHtml::encode($model->getAttributeLabel('updated_by')); ?></th>
             <td>
-              <?php echo CHtml::encode($model->updated_by); ?>
+              <?php echo CHtml::encode($model->updated->name); ?>
             </td>
           </tr>
           </tbody>
@@ -149,26 +149,3 @@ $this->breadcrumbs = array(
   </div>
   <!-- /.box-body -->
 </div>
-
-<?php $this->widget('zii.widgets.CDetailView', array(
-  'data' => $model,
-  'attributes' => array(
-    'id',
-    'yatrik_name',
-    'address',
-    'city',
-    'pincode',
-    'mobile_no',
-    'email',
-    'arrival_date',
-    'departure_date',
-    'receipt_no',
-    'deposit_amount',
-    'actual_amount',
-    'notes',
-    'created_date',
-    'created_by',
-    'updated_date',
-    'updated_by',
-  ),
-)); ?>

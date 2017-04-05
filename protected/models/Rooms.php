@@ -46,7 +46,9 @@ class Rooms extends CActiveRecord {
   public function relations() {
     // NOTE: you may need to adjust the relation name and the related
     // class name for the relations automatically generated below.
-    return array();
+    return array(
+      'booking_details' => array(self::HAS_MANY, 'BookingDetails', 'room_id'),
+    );
   }
 
   /**

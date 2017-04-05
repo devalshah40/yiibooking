@@ -1,7 +1,12 @@
 <?php
-$daterange = "$('#daterange').daterangepicker({ locale: {
-      format: 'DD-MM-YYYY'
-}});";
+$daterange = "$('#daterange').daterangepicker({ 
+  startDate: '".date('d-m-Y')."',
+  endDate: '".date('d-m-Y',strtotime('+2 days'))."',
+  minDate: '".date('d-m-Y')."',
+  locale: {
+        format: 'DD-MM-YYYY'
+  }
+});";
 
 Yii::app()->clientScript->registerScript('daterange', $daterange, CClientScript::POS_READY);
 

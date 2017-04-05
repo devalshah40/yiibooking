@@ -12,6 +12,16 @@ $this->menu = array(
   array('label' => 'Create Booking', 'url' => array('create')),
 );
 
+$datePickerJs = <<<EOD
+    //Date picker
+    $('.datepicker').datepicker({
+      autoclose: true
+    });
+EOD;
+
+Yii::app()->clientScript->registerScript('datePicker', $datePickerJs, CClientScript::POS_READY);
+
+
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
@@ -66,7 +76,11 @@ $('.search-form form').submit(function(){
                 'deposit_amount',
                 'actual_amount',
                 'created_date',
-                'created_by',
+                array(
+                  'name' => 'created_by',
+                  'value' => '$data->created->name',
+                  //'filter'=> array(1 => 'Active', 0 => 'Inactive')
+                ),
                 array(
                   'class' => 'CButtonColumn',
                 ),

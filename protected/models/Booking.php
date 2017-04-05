@@ -21,6 +21,12 @@
  * @property integer $created_by
  * @property string $updated_date
  * @property integer $updated_by
+ *
+ *
+ * The followings are the available model relations:
+ * @property Users $createdBy
+ * @property Users $updatedBy
+ * @property BookingDetails[] $bookingDetails
  */
 class Booking extends CActiveRecord {
 
@@ -29,25 +35,6 @@ class Booking extends CActiveRecord {
   public $endDate;
   public $noOfRooms;
   public $rooms;
-  public $searchRooms;
-
-  public $id;
-  public $yatrik_name;
-  public $address;
-  public $city;
-  public $pincode;
-  public $mobile_no;
-  public $email;
-  public $arrival_date;
-  public $departure_date;
-  public $receipt_no;
-  public $deposit_amount;
-  public $actual_amount;
-  public $notes;
-  public $created_date;
-  public $created_by;
-  public $updated_date;
-  public $updated_by;
 
   /**
    * @return string the associated database table name
@@ -86,8 +73,9 @@ class Booking extends CActiveRecord {
     // NOTE: you may need to adjust the relation name and the related
     // class name for the relations automatically generated below.
     return array(
-      'created' => array(self::HAS_ONE, 'User', 'created_by'),
-      'updated' => array(self::HAS_ONE, 'User', 'updated_by'),
+      'booking_details' => array(self::HAS_MANY, 'BookingDetails', 'booking_id'),
+      'created' => array(self::BELONGS_TO, 'User', 'created_by'),
+      'updated' => array(self::BELONGS_TO, 'User', 'updated_by'),
     );
   }
 
@@ -183,6 +171,16 @@ class Booking extends CActiveRecord {
       return true;
     } else
       return false;
+  }
+
+  public function afterFind() {
+    $this->dateRange = date('d-m-Y',strtotime($this->arrival_date)) .' - ' . date('d-m-Y',strtotime($this->departure_date));
+
+    foreach ($this->booking_details as $bookingDetails) {
+      $this->noOfRooms[] = $bookingDetails->number_count;
+      $this->rooms[] = $bookingDetails->room_id;
+    }
+    return true;
   }
 
   /**
