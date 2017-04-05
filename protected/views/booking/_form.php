@@ -27,6 +27,38 @@ $daterange = "$('#daterange').daterangepicker({
 Yii::app()->clientScript->registerScript('daterange', $daterange, CClientScript::POS_READY);
 
 
+$roomJs = <<<EOD
+var room = 20;
+var rooms_available = $("#rooms_count").val();
+function education_fields() {
+    var rooms_count = $("input:text.form-control.searchrooms").length;
+    if(rooms_count == rooms_available ) {
+      alert("Only "+rooms_available+" roomtypes are available.");
+      return false;
+    }
+   room++;
+   var objTo = document.getElementById("education_fields");
+   var divtest = document.createElement("div");
+   divtest.setAttribute("class", "removeclass"+room);
+	 var rdiv = "removeclass"+room;
+   divtest.innerHTML = '<div class="form-group removeclass">          <div class="col-xs-4">                    <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]/g,\'\');" class="form-control searchrooms" placeholder="No of rooms" name="Booking[noOfRooms][' + room + ']">              </div>              <div class="col-xs-7"> <select class="form-control" id="search_rooms'+room+'" name="Booking[rooms][' + room + ']"></select>            </div>              <div class="col-xs-1">                <button type="button" class="btn btn-danger btn-flat" onclick="remove_education_fields('+ room +');">-</button>              </div></div>';   
+   var options = $("#search_rooms > option").clone();   
+   divobj = $(divtest);
+   console.log(divobj.find("#search_rooms"+room));
+   divobj.find("#search_rooms"+room).append(options);
+   
+   console.log(divobj.find("#search_rooms"+room));
+   objTo.appendChild(divobj[0]);
+}
+function remove_education_fields(rid) {
+	   $(".removeclass"+rid).remove();
+	   room--;
+   }
+EOD;
+
+
+Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END);
+
 ?>
 
 <div class="row">
@@ -50,6 +82,7 @@ Yii::app()->clientScript->registerScript('daterange', $daterange, CClientScript:
       )); ?>
 
       <?php echo $form->errorSummary($model, null, '', array('class' => 'alert alert-error')); ?>
+      <input type="hidden" id="rooms_count" value="<?php echo count(Rooms::getRooms()); ?>">
       <div class="box-body">
         <div class="form-group">
           <?php echo $form->labelEx($model,'yatrik_name', array('class' => 'col-sm-2 control-label')); ?>
@@ -147,31 +180,28 @@ Yii::app()->clientScript->registerScript('daterange', $daterange, CClientScript:
         <div class="form-group">
           <label class="col-sm-2 control-label">Booked Rooms:</label>
 
-
           <div class="col-sm-5">
-          <div class="input-group">
             <?php
             if (!empty($model->rooms)) {
               foreach ($model->rooms as $key => $room) {
                 if ($key == 0) {
                   ?>
-                  <div class="col-xs-4">
-                    <?php echo $form->textField($model, 'noOfRooms[' . $key . ']', array('class' => 'form-control searchrooms', 'placeholder' => "No of rooms")); ?>
+                  <div class="form-group">
+                    <div class="col-xs-4">
+                      <?php echo $form->textField($model, 'noOfRooms[' . $key . ']', array('class' => 'form-control searchrooms', 'placeholder' => "No of rooms")); ?>
+                    </div>
+                    <div class="col-xs-7">
+                      <?php echo $form->dropDownList($model, "rooms[" . $key . "]", Rooms::getRooms(), array(
+                        'class' => "form-control",
+                        'id' => "search_rooms"
+                      )); ?>
+                    </div>
+                    <div class="col-xs-1">
+                      <button type="button" class="btn btn-info btn-flat" onclick="education_fields();">+</button>
+                    </div>
                   </div>
-                  <div class="col-xs-7">
-                    <?php echo $form->dropDownList($model, "rooms[" . $key . "]", Rooms::getRooms(), array(
-                      'class' => "form-control",
-                      'id' => "search_rooms"
-                    )); ?>
-                  </div>
-                  <div class="col-xs-1">
-                    <button type="button" class="btn btn-info btn-flat" onclick="education_fields();">+</button>
-                  </div>
-                  <br>
-                  <br>
-                  <br>
                 <?php } else { ?>
-                  <div class="form-group removeclass<?php echo $key; ?>">
+                  <div class="removeclass<?php echo $key; ?>">
                     <div class="form-group removeclass">
                       <div class="col-xs-4">
                         <?php echo $form->textField($model, 'noOfRooms[' . $key . ']', array('class' => 'form-control searchrooms', 'placeholder' => "No of rooms")); ?>
@@ -187,7 +217,6 @@ Yii::app()->clientScript->registerScript('daterange', $daterange, CClientScript:
                           -
                         </button>
                       </div>
-                      <br> <br>
                     </div>
                   </div>
                   <?php

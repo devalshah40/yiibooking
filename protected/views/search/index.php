@@ -65,7 +65,7 @@ Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END
         'htmlOptions' => array('role' => 'form'),
       )); ?>
       <?php echo $form->errorSummary($model, null, '', array('class' => 'alert alert-error')); ?>
-      <input type="hidden" id="rooms_count" value="<?php echo count(Rooms::getRooms()); ?>">
+      <input type="hidden" id="rooms_count" value="<?php echo count(Rooms::getRooms()); ?>" >
       <div class="box-body">
         <!-- Date range -->
         <div class="form-group">

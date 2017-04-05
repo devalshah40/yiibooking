@@ -85,7 +85,20 @@ class BookingController extends Controller {
     // $this->performAjaxValidation($model);
 
     if (isset($_POST['Booking'])) {
+      $oldNoOfRooms = $model->noOfRooms;
+      $oldRooms = $model->rooms;
+
       $model->attributes = $_POST['Booking'];
+//      var_dump($oldNoOfRooms);
+//      var_dump($oldRooms);
+
+      $searchedRooms = array();
+      foreach ($oldNoOfRooms as $key => $oldNoOfRoom) {
+        $searchedRooms[$oldRooms[$key]] = $oldNoOfRoom;
+      }
+
+//      var_dump($model);
+//      exit;
       if ($model->save())
         $this->redirect(array('view', 'id' => $model->id));
     }
