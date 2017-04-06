@@ -126,6 +126,10 @@ class RoomsController extends Controller
 //		$this->render('index',array(
 //			'dataProvider'=>$dataProvider,
 //		));
+
+    if (isset($_GET['pageSize'])) {
+      Yii::app()->user->setState('pageSize',(int) $_GET['pageSize']);
+    }
     $model=new Rooms('search');
     $model->unsetAttributes();  // clear any default values
     if(isset($_GET['Rooms']))
@@ -141,6 +145,8 @@ class RoomsController extends Controller
 	 */
 	public function actionAdmin()
 	{
+
+
 		$model=new Rooms('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Rooms']))
