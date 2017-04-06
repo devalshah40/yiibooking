@@ -91,8 +91,13 @@ class Rooms extends CActiveRecord {
     $criteria->compare('created_date', $this->created_date, true);
     $criteria->compare('updated_date', $this->updated_date, true);
 
+    $pageSize=Yii::app()->user->getState('pageSize',Yii::app()->params['defaultPageSize']);
+
     return new CActiveDataProvider($this, array(
       'criteria' => $criteria,
+      'pagination' => array(
+        'pageSize' => $pageSize,
+      ),
     ));
   }
 

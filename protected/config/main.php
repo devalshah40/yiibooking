@@ -8,7 +8,7 @@
 // CWebApplication properties can be configured here.
 return array(
   'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
-  'name' => 'Girnar project',
+  'name' => 'Girnar Dharamshala',
   'theme' => 'adminlte', // requires you to copy the theme under your themes directory
   'defaultController' => 'site/index',
   // preloading 'log' component
@@ -154,7 +154,7 @@ return array(
       'pathLayouts' => 'application.views.email.layouts'
     ),
 
-    'log' => array(
+    /*'log' => array(
       'class' => 'CLogRouter',
       'routes' => array(
         array(
@@ -168,7 +168,7 @@ return array(
         ),
 
       ),
-    ),
+    ),*/
 
   ),
 
@@ -178,5 +178,7 @@ return array(
     // this is used in contact page
     'adminEmail' => 'webmaster@example.com',
     'replyToEmail' => 'info@example.com',
+    'defaultPageSize' => 10,
+    'pageSizeOptions' => array(2=>2,10=>10,20=>20,50=>50,100=>100),
   ),
 );

@@ -80,10 +80,10 @@ class SearchForm extends CFormModel {
               INNER JOIN `booking_details` bd 
                 ON b.id = bd.`booking_id` 
                 AND b.`arrival_date` = :startDate 
-                AND b.`departure_date` = :endDate 
-            RIGHT JOIN (SELECT * FROM rooms r WHERE FIND_IN_SET (r.`id`, :rooms)) r ON bd.`room_id` = r.`id` AND FIND_IN_SET (bd.`room_id`, :rooms)
+                AND b.`departure_date` = :endDate AND FIND_IN_SET (bd.`room_id`, :rooms)
+            RIGHT JOIN (SELECT * FROM rooms r WHERE FIND_IN_SET (r.`id`, :rooms)) r ON bd.`room_id` = r.`id` 
             GROUP BY
-                bd.`room_id`
+                r.id
             order by 
                 r.id";
 
@@ -91,6 +91,7 @@ class SearchForm extends CFormModel {
     $command->bindParam(":startDate",$this->startDate,PDO::PARAM_STR);
     $command->bindParam(":endDate",$this->endDate,PDO::PARAM_STR);
     $rooms_str = implode(',', $this->rooms);
+
     $command->bindParam(":rooms",$rooms_str,PDO::PARAM_STR);
 
     $results = $command->queryAll();
@@ -114,6 +115,7 @@ class SearchForm extends CFormModel {
         }
 
         $room_result['searched_rooms'] = $rooms_search_count;
+        $room_result['noOfDays'] = $this->noOfDays;
         if (is_null($room_result['available_rooms']) || $room_result['available_rooms'] >= $rooms_search_count ) {
           $room_result['price'] = $room_result['room_price'] * $rooms_search_count;
         } else {

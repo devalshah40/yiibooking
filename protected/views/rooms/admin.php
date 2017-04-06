@@ -1,4 +1,16 @@
 <?php
+
+$pageSize=Yii::app()->user->getState('pageSize',Yii::app()->params['defaultPageSize']);
+$pageSizeDropDown = CHtml::dropDownList(
+  'pageSize',
+  $pageSize,
+  Yii::app()->params['pageSizeOptions'],
+  array(
+    'class'    => 'change-pagesize',
+    'onchange' => '$.fn.yiiGridView.update("rooms-grid",{data:{pageSize:$(this).val()}});',
+  )
+);
+
 /* @var $this RoomsController */
 /* @var $model Rooms */
 
@@ -23,6 +35,12 @@ $('.search-form form').submit(function(){
 	});
 	return false;
 });
+
+$('.change-pageSize').click(function(){
+	$('#rooms-grid').yiiGridView('update', {
+		data: { pageSize: $(this).val() }
+	});
+});
 ");
 ?>
 
@@ -37,12 +55,23 @@ $('.search-form form').submit(function(){
 
         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
           <div class="row">
+            <div class="col-sm-6">
+              <div class="dataTables_length" id="example1_length">
+                <label>Show <?php echo $pageSizeDropDown; ?> entries</label>
+              </div>
+            </div>
+            <div class="col-sm-6">
+
+            </div>
+          </div>
+          <div class="row">
         <?php $this->widget('zii.widgets.grid.CGridView', array(
           'id' => 'rooms-grid',
           'htmlOptions' => array('class' => 'col-sm-12'),
           'itemsCssClass' => 'table table-bordered table-striped dataTable',
           'dataProvider' => $model->search(),
           'enableSorting' => false,
+          'enablePagination' => true,
           'pager' => array(
             'class' => 'CLinkPager',
             'hiddenPageCssClass' => 'paginate_button disabled',

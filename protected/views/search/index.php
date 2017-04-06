@@ -198,7 +198,26 @@ Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END
                       No rooms are available on these days.
                     <?php }
                   } else { ?>
-                    Price :- ₹<?php echo $bookedRoom['price']; ?>
+                    <table class="table table-striped">
+                      <tbody>
+                      <tr>
+                        <th style="width: 120px">AC Room Price</th>
+                        <td>₹<?php echo $bookedRoom['room_price']; ?></td>
+                      </tr>
+                      <tr>
+                        <th style="width: 120px">No of days</th>
+                        <td><?php echo $bookedRoom['noOfDays']; ?></td>
+                      </tr>
+                      <tr>
+                        <th style="width: 120px">No of rooms</th>
+                        <td><?php echo $bookedRoom['searched_rooms']; ?></td>
+                      </tr>
+                      <tr>
+                        <th style="width: 120px">Final price</th>
+                        <td>(₹<?php echo $bookedRoom['room_price']; ?> * <?php echo $bookedRoom['noOfDays']; ?> * <?php echo $bookedRoom['searched_rooms']; ?>) = ₹<?php echo ($bookedRoom['room_price'] * $bookedRoom['noOfDays'] * $bookedRoom['searched_rooms']); ?></td>
+                      </tr>
+                      </tbody>
+                    </table>
                   <?php } ?>
                 </div><!-- /.box-body -->
               </div>
@@ -216,7 +235,9 @@ Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END
               </button>
             </div>
           </div>
-         <?php  } ?>
+         <?php  } else { ?>
+              Please search rooms.
+          <?php } ?>
           <?php $this->endWidget(); ?>
         </div>
         <!-- /.tab-pane -->
