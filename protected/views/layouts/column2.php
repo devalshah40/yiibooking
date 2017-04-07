@@ -57,6 +57,16 @@
 
     <!-- Main content -->
     <section class="content">
+      <?php
+      $flashMessages = Yii::app()->user->getFlashes();
+      if ($flashMessages) {
+        foreach($flashMessages as $key => $message) {
+          echo '<div class="alert alert-' . $key . ' alert-dismissable">
+                  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                ' . $message . "</div>";
+        }
+      }
+      ?>
       <?php echo $content; ?>
     </section><!-- /.content -->
 

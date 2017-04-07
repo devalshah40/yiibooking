@@ -94,8 +94,13 @@ class RoomsController extends Controller
 		if(isset($_POST['Rooms']))
 		{
 			$model->attributes=$_POST['Rooms'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if ($model->save()) {
+        Yii::app()->user->setFlash('success', "Room information is updated.");
+        $this->redirect(array('view','id'=>$model->id));
+      } else {
+        Yii::app()->user->setFlash('error', "Please try again. Room information isn't updated.");
+        $this->redirect(array('view','id'=>$model->id));
+      }
 		}
 
 		$this->render('update',array(
@@ -146,6 +151,9 @@ class RoomsController extends Controller
 	public function actionAdmin()
 	{
 
+    if (isset($_GET['pageSize'])) {
+      Yii::app()->user->setState('pageSize',(int) $_GET['pageSize']);
+    }
 
 		$model=new Rooms('search');
 		$model->unsetAttributes();  // clear any default values

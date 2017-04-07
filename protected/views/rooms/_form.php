@@ -10,7 +10,10 @@
     <!-- Horizontal Form -->
     <div class="box box-info">
       <div class="box-header with-border">
-        <h3 class="box-title">Fields with * are required.</h3>
+        <h3 class="box-title">
+          <?php //echo($model->isNewRecord ? 'Add' : 'Update') ?>
+          Fields with * are required.
+        </h3>
       </div>
       <!-- /.box-header -->
       <!-- form start -->
@@ -63,7 +66,7 @@
       <div class="box-footer">
         <div class="col-sm-offset-2 col-sm-5">
           <button type="submit" class="btn btn-info "><?php echo($model->isNewRecord ? 'Create' : 'Save') ?></button>
-          <button type="submit" class="btn btn-default">Cancel</button>
+          <a href="<?php echo $this->createUrl("/rooms/index"); ?>" class="btn btn-default" role="button">Cancel</a>
         </div>
       </div>
       <!-- /.box-footer -->

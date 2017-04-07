@@ -4,7 +4,7 @@
 
 $this->breadcrumbs=array(
 	'Rooms'=>array('index'),
-	$model->id=>array('view','id'=>$model->id),
+	$model->room_name =>array('view','id'=>$model->id),
 	'Update',
 );
 
@@ -15,7 +15,5 @@ $this->menu=array(
 	array('label'=>'Manage Rooms', 'url'=>array('admin')),
 );
 ?>
-
-<h1>Update Rooms <?php echo $model->id; ?></h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

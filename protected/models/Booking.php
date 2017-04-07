@@ -34,7 +34,28 @@ class Booking extends CActiveRecord {
   public $startDate;
   public $endDate;
   public $noOfRooms;
+  public $noOfDays;
   public $rooms;
+  public $roomsPrices;
+  public $searchRooms;
+
+  public $id;
+  public $yatrik_name;
+  public $address;
+  public $city;
+  public $pincode;
+  public $mobile_no;
+  public $email;
+  public $arrival_date;
+  public $departure_date;
+  public $receipt_no;
+  public $deposit_amount;
+  public $actual_amount;
+  public $notes;
+  public $created_date;
+  public $created_by;
+  public $updated_date;
+  public $updated_by;
 
   /**
    * @return string the associated database table name
@@ -59,6 +80,14 @@ class Booking extends CActiveRecord {
       array('yatrik_name, city, mobile_no, email, receipt_no', 'length', 'max' => 255),
       array('pincode', 'length', 'max' => 7),
       array('deposit_amount, actual_amount', 'length', 'max' => 10),
+      array(
+        'deposit_amount',
+        'compare',
+        'compareAttribute'=>'actual_amount',
+        'operator'=>'<=',
+        'allowEmpty'=>false ,
+        'message'=>'Deposit amount must be greater than Actual amount".'
+      ),
       array('address, notes,rooms,noOfRooms', 'safe'),
       // The following rule is used by search().
       // @todo Please remove those attributes that should not be searched.
@@ -77,6 +106,15 @@ class Booking extends CActiveRecord {
       'created' => array(self::BELONGS_TO, 'User', 'created_by'),
       'updated' => array(self::BELONGS_TO, 'User', 'updated_by'),
     );
+  }
+
+  /**
+   * @return string the URL that shows the detail of the post
+   */
+  public function getUrl() {
+    return Yii::app()->createUrl('booking/view', array(
+      'id' => $this->id
+    ));
   }
 
   /**
@@ -177,11 +215,20 @@ class Booking extends CActiveRecord {
   }
 
   public function afterFind() {
-    $this->dateRange = date('d-m-Y',strtotime($this->arrival_date)) .' - ' . date('d-m-Y',strtotime($this->departure_date));
+    $this->startDate = date('Y-m-d', strtotime($this->arrival_date));
+    $this->endDate  = date('Y-m-d', strtotime($this->departure_date));
+
+    $this->dateRange = $this->startDate .' - ' . $this->endDate;
+
+    $date1 = new DateTime($this->startDate);
+    $date2 = new DateTime($this->endDate);
+
+    $this->noOfDays = $date2->diff($date1)->format("%a");
 
     foreach ($this->booking_details as $bookingDetails) {
       $this->noOfRooms[] = $bookingDetails->number_count;
       $this->rooms[] = $bookingDetails->room_id;
+//      $this->roomsPrices[] = $bookingDetails->room_price;
     }
     return true;
   }
@@ -195,6 +242,7 @@ class Booking extends CActiveRecord {
     $loginUserID = Yii::app()->user->id;
     $transaction = $connection->beginTransaction();
     try {
+      $created_date = date('Y-m-d H:i:s');
       $sql = "INSERT INTO `booking` (
               `yatrik_name`,
               `address`,
@@ -245,9 +293,9 @@ class Booking extends CActiveRecord {
       $command->bindParam(':deposit_amount', $this->deposit_amount, PDO::PARAM_INT);
       $command->bindParam(':actual_amount', $this->actual_amount, PDO::PARAM_INT);
       $command->bindParam(':notes', $this->notes, PDO::PARAM_STR);
-      $command->bindParam(':created_date', date('Y-m-d'), PDO::PARAM_STR);
+      $command->bindParam(':created_date', $created_date, PDO::PARAM_STR);
       $command->bindParam(':created_by', $loginUserID, PDO::PARAM_INT);
-      $command->bindParam(':updated_date', date('Y-m-d'), PDO::PARAM_STR);
+      $command->bindParam(':updated_date', $created_date, PDO::PARAM_STR);
       $command->bindParam(':updated_by', $loginUserID, PDO::PARAM_INT);
       $command->execute();
 
@@ -275,6 +323,10 @@ class Booking extends CActiveRecord {
         $command->execute();
       }
       $transaction->commit();
+
+      Yii::app()->user->setFlash('success', "Booking is successfully done.");
+      $this->redirect(array('/booking/view','id' => $booking_id));
+
       return true;
     } catch (Exception $e) // an exception is raised if a query fails
     {

@@ -6,6 +6,8 @@ $this->breadcrumbs = array(
   'Bookings' => array('index'),
   $model->id,
 );
+//var_dump($model);
+//exit;
 //
 //$this->menu=array(
 //	array('label'=>'List Booking', 'url'=>array('index')),
@@ -16,7 +18,7 @@ $this->breadcrumbs = array(
 //);
 ?>
 
-<h3>Booking Details #<?php echo $model->id; ?></h3>
+<!--<h3>Booking Details #<?php /*echo $model->id; */?></h3>-->
 
 
 <div class="row">
@@ -26,7 +28,7 @@ $this->breadcrumbs = array(
 
     <div class="box">
       <div class="box-header">
-        <h3 class="box-title">Receipt #<?php echo $model->id; ?></h3>
+        <h3 class="box-title">Booking Details #<?php echo $model->id; ?></h3>
       </div>
       <!-- /.box-header -->
       <div class="box-body no-padding">
@@ -117,6 +119,35 @@ $this->breadcrumbs = array(
               <?php echo CHtml::encode($model->notes); ?>
             </td>
           </tr>
+          <?php foreach($model->booking_details as $key => $booking_details) {
+//            var_dump($booking_details);exit;
+            ?>
+          <tr>
+            <th style="width: 150px"><?php echo 'Rooms '.($key+1); ?></th>
+            <td>
+              <table class="table table-striped">
+                <tbody>
+                <tr>
+                  <th style="width: 120px"><?php echo $booking_details->room->room_name; ?> Price</th>
+                  <td>₹<?php echo $booking_details->room_price; ?></td>
+                </tr>
+                <tr>
+                  <th style="width: 120px">No of days</th>
+                  <td><?php echo $model->noOfDays; ?></td>
+                </tr>
+                <tr>
+                  <th style="width: 120px">No of rooms</th>
+                  <td><?php echo $booking_details->number_count; ?></td>
+                </tr>
+                <tr>
+                  <th style="width: 120px">Final price</th>
+                  <td>(₹<?php echo $booking_details->room_price; ?> * <?php echo $model->noOfDays; ?> * <?php echo $booking_details->number_count; ?>) = ₹<?php echo ($booking_details->room_price * $model->noOfDays * $booking_details->number_count); ?></td>
+                </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <?php } ?>
           <tr>
             <th style="width: 150px"><?php echo CHtml::encode($model->getAttributeLabel('created_date')); ?></th>
             <td>
@@ -145,6 +176,13 @@ $this->breadcrumbs = array(
         </table>
       </div>
       <!-- /.box-body -->
+      <!-- /.box-body -->
+      <div class="box-footer">
+        <div class="col-sm-offset-2 col-sm-5">
+          <a href="<?php echo $this->createUrl("/booking/admin"); ?>" class="btn btn-info" role="button">Back</a>
+        </div>
+      </div>
+
     </div>
   </div>
   <!-- /.box-body -->

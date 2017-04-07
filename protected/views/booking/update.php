@@ -15,7 +15,4 @@ $this->menu=array(
 	array('label'=>'Manage Booking', 'url'=>array('admin')),
 );
 ?>
-
-<h1>Update Booking <?php echo $model->id; ?></h1>
-
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

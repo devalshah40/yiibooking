@@ -73,6 +73,7 @@ function reinstallDatePicker(id, data) {
   )); ?>
 </div><!-- search-form -->
 
+<div class="row">
   <div class="col-xs-12">
     <div class="box">
       <div class="box-header">
@@ -161,4 +162,5 @@ function reinstallDatePicker(id, data) {
             )); ?>
       </div>
     </div>
+  </div>
   </div>

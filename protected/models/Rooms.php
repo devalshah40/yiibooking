@@ -67,6 +67,15 @@ class Rooms extends CActiveRecord {
   }
 
   /**
+   * @return string the URL that shows the detail of the post
+   */
+  public function getUrl() {
+    return Yii::app()->createUrl('rooms/view', array(
+      'id' => $this->id
+    ));
+  }
+
+  /**
    * Retrieves a list of models based on the current search/filter conditions.
    *
    * Typical usecase:

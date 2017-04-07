@@ -2,7 +2,8 @@
 SQLyog Ultimate v12.09 (32 bit)
 MySQL - 10.1.13-MariaDB : Database - yii1blog
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -132,3 +133,6 @@ insert  into `users_old`(`id`,`username`,`password`,`email`,`location`,`mobile_n
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+ALTER TABLE `yii1blog`.`booking_details` ADD COLUMN `room_price` DECIMAL(10,2) DEFAULT 0.00 NULL AFTER `number_count`;
+UPDATE `booking_details` bd INNER JOIN rooms r ON r.`id` = bd.`room_id` SET bd.`room_price` = r.`room_price`;

@@ -84,6 +84,11 @@ Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END
       <?php echo $form->errorSummary($model, null, '', array('class' => 'alert alert-error')); ?>
       <input type="hidden" id="rooms_count" value="<?php echo count(Rooms::getRooms()); ?>">
       <div class="box-body">
+        <div class="alert alert-info alert-dismissible">
+          <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+          <h4><i class="icon fa fa-info"></i> Alert!</h4>
+          If you want to change <strong>Arrival date</strong>,<strong>Departure date</strong> & <strong>Rooms</strong> then Please delete this booking and create new booking.
+        </div>
         <div class="form-group">
           <?php echo $form->labelEx($model,'yatrik_name', array('class' => 'col-sm-2 control-label')); ?>
 
@@ -137,7 +142,7 @@ Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END
               <div class="input-group-addon">
                 <i class="fa fa-calendar"></i>
               </div>
-                <?php echo $form->textField($model, 'dateRange', array('class' => 'form-control pull-right', 'id' => "daterange")); ?>
+                <?php echo $form->textField($model, 'dateRange', array('class' => 'form-control pull-right', 'id' => "daterange", "disabled" => "disabled")); ?>
               </div>
           </div>
         </div>
@@ -163,7 +168,7 @@ Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END
           <?php echo $form->labelEx($model,'actual_amount', array('class' => 'col-sm-2 control-label')); ?>
 
           <div class="col-sm-5">
-            <?php echo $form->textField($model,'actual_amount',array('size'=>10,'maxlength'=>10, 'class' => 'form-control', 'placeholder' => "Actual amount")); ?>
+            <?php echo $form->textField($model,'actual_amount',array('size'=>10,'maxlength'=>10, 'class' => 'form-control', 'placeholder' => "Actual amount", "disabled" => "disabled")); ?>
           </div>
         </div>
 
@@ -188,35 +193,35 @@ Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END
                   ?>
                   <div class="form-group">
                     <div class="col-xs-4">
-                      <?php echo $form->textField($model, 'noOfRooms[' . $key . ']', array('class' => 'form-control searchrooms', 'placeholder' => "No of rooms")); ?>
+                      <?php echo $form->textField($model, 'noOfRooms[' . $key . ']', array('class' => 'form-control searchrooms', 'placeholder' => "No of rooms", "disabled" => "disabled")); ?>
                     </div>
                     <div class="col-xs-7">
                       <?php echo $form->dropDownList($model, "rooms[" . $key . "]", Rooms::getRooms(), array(
-                        'class' => "form-control",
+                        'class' => "form-control", "disabled" => "disabled",
                         'id' => "search_rooms"
                       )); ?>
                     </div>
-                    <div class="col-xs-1">
+                    <!--<div class="col-xs-1">
                       <button type="button" class="btn btn-info btn-flat" onclick="education_fields();">+</button>
-                    </div>
+                    </div>-->
                   </div>
                 <?php } else { ?>
                   <div class="removeclass<?php echo $key; ?>">
                     <div class="form-group removeclass">
                       <div class="col-xs-4">
-                        <?php echo $form->textField($model, 'noOfRooms[' . $key . ']', array('class' => 'form-control searchrooms', 'placeholder' => "No of rooms")); ?>
+                        <?php echo $form->textField($model, 'noOfRooms[' . $key . ']', array('class' => 'form-control searchrooms', 'placeholder' => "No of rooms", "disabled" => "disabled")); ?>
                       </div>
                       <div class="col-xs-7">
                         <?php echo $form->dropDownList($model, "rooms[" . $key . "]", Rooms::getRooms(), array(
-                          'class' => "form-control",
+                          'class' => "form-control", "disabled" => "disabled"
                         )); ?>
                       </div>
-                      <div class="col-xs-1">
-                        <button onclick="remove_education_fields(<?php echo $key; ?>);" class="btn btn-danger btn-flat"
+                      <!--<div class="col-xs-1">
+                        <button onclick="remove_education_fields(<?php /*echo $key; */?>);" class="btn btn-danger btn-flat"
                                 type="button">
                           -
                         </button>
-                      </div>
+                      </div>-->
                     </div>
                   </div>
                   <?php
@@ -233,9 +238,10 @@ Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END
         </div>
 
         <?php
-        echo $form->hiddenField($model,'dateRange', array('value' => $model->dateRange));
-        echo $form->hiddenField($model,'arrival_date', array('value' => $model->startDate));
-        echo $form->hiddenField($model,'departure_date', array('value' => $model->endDate));
+        echo $form->hiddenField($model,'actual_amount', array('value' => $model->actual_amount));
+//        echo $form->hiddenField($model,'dateRange', array('value' => $model->dateRange));
+//        echo $form->hiddenField($model,'arrival_date', array('value' => $model->startDate));
+//        echo $form->hiddenField($model,'departure_date', array('value' => $model->endDate));
 //        if (!empty($model->rooms)) {
 //          foreach ($model->rooms as $key => $room) {
 //            echo $form->hiddenField($model, 'noOfRooms[' . $key . ']', array('value' => $model->noOfRooms[$key]));

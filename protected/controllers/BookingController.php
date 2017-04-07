@@ -125,9 +125,21 @@ class BookingController extends Controller {
    * Lists all models.
    */
   public function actionIndex() {
-    $dataProvider = new CActiveDataProvider('Booking');
+    /*$dataProvider = new CActiveDataProvider('Booking');
     $this->render('index', array(
       'dataProvider' => $dataProvider,
+    ));*/
+    if (isset($_GET['pageSize'])) {
+      Yii::app()->user->setState('pageSize',(int) $_GET['pageSize']);
+    }
+
+    $model = new Booking('search');
+    $model->unsetAttributes();  // clear any default values
+    if (isset($_GET['Booking']))
+      $model->attributes = $_GET['Booking'];
+
+    $this->render('admin', array(
+      'model' => $model,
     ));
   }
 
@@ -135,6 +147,11 @@ class BookingController extends Controller {
    * Manages all models.
    */
   public function actionAdmin() {
+
+    if (isset($_GET['pageSize'])) {
+      Yii::app()->user->setState('pageSize',(int) $_GET['pageSize']);
+    }
+
     $model = new Booking('search');
     $model->unsetAttributes();  // clear any default values
     if (isset($_GET['Booking']))

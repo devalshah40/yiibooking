@@ -236,7 +236,7 @@ Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END
             </div>
           </div>
          <?php  } else { ?>
-              Please search rooms.
+            <h3>Please search rooms.</h3>
           <?php } ?>
           <?php $this->endWidget(); ?>
         </div>
@@ -254,67 +254,67 @@ Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END
           <?php echo $form->errorSummary($bookingModel, null, '', array('class' => 'alert alert-error')); ?>
           <div class="form-group">
             <div class="form-group">
-              <label class="col-sm-2 control-label">Yatrik Name</label>
-              <div class="col-sm-10">
+              <label class="col-sm-3 control-label">Yatrik Name <span class="required">*</span></label>
+              <div class="col-sm-7">
                 <?php echo $bookingForm->textField($bookingModel,'yatrik_name', array('class' => 'form-control', 'placeholder' => "Yatrik Name")); ?>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">Address</label>
+              <label class="col-sm-3 control-label">Address <span class="required">*</span> </label>
 
-              <div class="col-sm-10">
+              <div class="col-sm-7">
                 <?php echo $bookingForm->textArea($bookingModel,'address', array('class' => 'form-control', 'placeholder' => "Address")); ?>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">City</label>
+              <label class="col-sm-3 control-label">City <span class="required">*</span></label>
 
-              <div class="col-sm-10">
+              <div class="col-sm-7">
                 <?php echo $bookingForm->textField($bookingModel,'city', array('class' => 'form-control', 'placeholder' => "Ahmedabad")); ?>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">Pincode</label>
+              <label class="col-sm-3 control-label">Pincode <span class="required">*</span></label>
 
-              <div class="col-sm-10">
+              <div class="col-sm-7">
                 <?php echo $bookingForm->textField($bookingModel,'pincode', array('class' => 'form-control', 'placeholder' => "380005")); ?>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">Mobile no</label>
+              <label class="col-sm-3 control-label">Mobile no <span class="required">*</span></label>
 
-              <div class="col-sm-10">
+              <div class="col-sm-7">
                 <?php echo $bookingForm->textField($bookingModel,'mobile_no', array('class' => 'form-control', 'placeholder' => "94268XXXXX")); ?>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">Email</label>
+              <label class="col-sm-3 control-label">Email <span class="required">*</span></label>
 
-              <div class="col-sm-10">
+              <div class="col-sm-7">
                 <?php echo $bookingForm->textField($bookingModel,'email', array('class' => 'form-control', 'placeholder' => "Email-ID")); ?>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">Receipt No</label>
-              <div class="col-sm-10">
+              <label class="col-sm-3 control-label">Receipt No <span class="required">*</span></label>
+              <div class="col-sm-7">
                 <?php echo $bookingForm->textField($bookingModel,'receipt_no', array('class' => 'form-control', 'placeholder' => "Receipt no")); ?>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">Deposit amount</label>
-              <div class="col-sm-10">
+              <label class="col-sm-3 control-label">Deposit amount <span class="required">*</span></label>
+              <div class="col-sm-7">
                 <?php echo $bookingForm->textField($bookingModel,'deposit_amount', array('class' => 'form-control', 'placeholder' => "Deposit amount")); ?>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">Actual Amount</label>
-              <div class="col-sm-10">
+              <label class="col-sm-3 control-label">Actual Amount <span class="required">*</span></label>
+              <div class="col-sm-7">
                 <?php echo $bookingForm->textField($bookingModel,'actual_amount', array('class' => 'form-control', 'readOnly' => "readOnly", 'value' => $model->total_booking_price)); ?>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">Notes</label>
-              <div class="col-sm-10">
+              <label class="col-sm-3 control-label">Notes <span class="required">*</span></label>
+              <div class="col-sm-7">
                 <?php echo $bookingForm->textArea($bookingModel,'notes', array('class' => 'form-control', 'placeholder' => "Notes")); ?>
               </div>
             </div>
