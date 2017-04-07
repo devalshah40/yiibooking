@@ -178,7 +178,7 @@ return array(
     // this is used in contact page
     'adminEmail' => 'webmaster@example.com',
     'replyToEmail' => 'info@example.com',
-    'defaultPageSize' => 10,
+    'defaultPageSize' => 2,
     'pageSizeOptions' => array(2=>2,10=>10,20=>20,50=>50,100=>100),
   ),
 );

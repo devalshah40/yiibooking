@@ -1,4 +1,19 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/datatables/dataTables.bootstrap.css">
 <?php
+
+$pageSize=Yii::app()->user->getState('pageSize',Yii::app()->params['defaultPageSize']);
+$pageSizeDropDown = CHtml::dropDownList(
+  'pageSize',
+  $pageSize,
+  Yii::app()->params['pageSizeOptions'],
+  array(
+    'class'    => 'change-pagesize',
+    'onchange' => '$.fn.yiiGridView.update("booking-grid",{data:{pageSize:$(this).val()}});',
+  )
+);
+
+$dataProvider = $model->search();
 /* @var $this BookingController */
 /* @var $model Booking */
 

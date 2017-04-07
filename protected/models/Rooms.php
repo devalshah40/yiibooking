@@ -97,7 +97,8 @@ class Rooms extends CActiveRecord {
       'criteria' => $criteria,
       'pagination' => array(
         'pageSize' => $pageSize,
-      ),
+        'pageVar' => '#example1_paginate',
+      )
     ));
   }
 
