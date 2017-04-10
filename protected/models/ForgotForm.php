@@ -45,9 +45,34 @@ class ForgotForm extends CFormModel
 	{
         $new_password = Yii::app()->getSecurityManager()->generateRandomString(8,true);
 
-        $user = User::model()->findByAttributes(array('email' => $this->email));
-        $user->password = CPasswordHelper::hashPassword($new_password);
-        $user->save();
+
+        Yii::app()->mailer->IsSMTP(); // telling the class to use SMTP
+//        Yii::app()->mailer->Host       = "smtp.gmail.com"; // SMTP server
+//        Yii::app()->mailer->SMTPDebug  = 2;                     // enables SMTP debug information (for testing)
+        // 1 = errors and messages
+        // 2 = messages only
+        Yii::app()->mailer->SMTPAuth   = true;                  // enable SMTP authentication
+        Yii::app()->mailer->SMTPSecure = "tls";                 // sets the prefix to the servier
+        Yii::app()->mailer->Host       = "smtp.gmail.com";      // sets GMAIL as the SMTP server
+        Yii::app()->mailer->Port       = 587;                   // set the SMTP port for the GMAIL server
+        Yii::app()->mailer->Username   = "devalshah21@gmail.com";  // GMAIL username
+//        Yii::app()->mailer->Password   = "Kangana!@#";            // GMAIL password
+
+//        Yii::app()->mailer->SetFrom('name@yourdomain.com', 'First Last');
+//
+//        Yii::app()->mailer->AddReplyTo("name@yourdomain.com","First Last");
+//
+//        Yii::app()->mailer->Subject    = "PHPMailer Test Subject via smtp (Gmail), basic";
+//
+//        Yii::app()->mailer->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
+//
+//        Yii::app()->mailer->MsgHTML($body);
+
+//        $address = "whoto@otherdomain.com";
+//        Yii::app()->mailer->AddAddress($address, "John Doe");
+//
+//        Yii::app()->mailer->AddAttachment("images/phpmailer.gif");      // attachment
+//        Yii::app()->mailer->AddAttachment("images/phpmailer_mini.gif"); // attachment
 
         Yii::app()->mailer->From = Yii::app()->params['replyToEmail'];
         Yii::app()->mailer->FromName = Yii::app()->name;
@@ -55,7 +80,18 @@ class ForgotForm extends CFormModel
         Yii::app()->mailer->Subject = 'Reset Password';
         Yii::app()->mailer->isHTML(true);
         Yii::app()->mailer->getView('forgot', array('password'=>$new_password),'html');
-        Yii::app()->mailer->Send();
+
+        if(!Yii::app()->mailer->Send())
+        {
+          echo "Mailer Error: " . Yii::app()->mailer->ErrorInfo;
+        }
+        else
+        {
+          $user = User::model()->findByAttributes(array('email' => $this->email));
+          $user->password = md5($new_password);
+          $user->save();
+        }
+
 
         return true;
 	}

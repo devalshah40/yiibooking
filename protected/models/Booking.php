@@ -57,6 +57,13 @@ class Booking extends CActiveRecord {
   public $updated_date;
   public $updated_by;
 
+  public $arrival_from_date;
+  public $arrival_to_date;
+  public $departure_from_date;
+  public $departure_to_date;
+  public $created_from_date;
+  public $created_to_date;
+
   /**
    * @return string the associated database table name
    */
@@ -83,12 +90,12 @@ class Booking extends CActiveRecord {
       array(
         'deposit_amount',
         'compare',
-        'compareAttribute'=>'actual_amount',
-        'operator'=>'<=',
-        'allowEmpty'=>false ,
-        'message'=>'Deposit amount must be less than or equal to Actual amount".'
+        'compareAttribute' => 'actual_amount',
+        'operator' => '<=',
+        'allowEmpty' => false,
+        'message' => 'Deposit amount must be less than or equal to Actual amount".'
       ),
-      array('address, notes,rooms,noOfRooms', 'safe'),
+      array('address, notes,rooms,noOfRooms, arrival_from_date, arrival_to_date, departure_from_date, departure_to_date, created_from_date, created_to_date,', 'safe'),
       // The following rule is used by search().
       // @todo Please remove those attributes that should not be searched.
       array('id, yatrik_name, address, city, pincode, mobile_no, email, arrival_date, departure_date, receipt_no, deposit_amount, actual_amount, notes, created_date, created_by, updated_date, updated_by', 'safe', 'on' => 'search'),
@@ -159,6 +166,8 @@ class Booking extends CActiveRecord {
 
     $criteria = new CDbCriteria;
 
+    $criteria->with = array('created', 'booking_details.room', 'updated');
+
     $criteria->compare('id', $this->id);
     $criteria->compare('yatrik_name', $this->yatrik_name, true);
     $criteria->compare('address', $this->address, true);
@@ -174,24 +183,43 @@ class Booking extends CActiveRecord {
     $criteria->compare('updated_date', $this->updated_date, true);
     $criteria->compare('updated_by', $this->updated_by);
 
-    if(!empty($this->arrival_date)){
-      $criteria->compare('arrival_date', date('Y-m-d', strtotime($this->arrival_date)), true);      
+    if (!empty($this->arrival_from_date)) {
+      $criteria->addCondition('arrival_date >= "'.date('Y-m-d', strtotime($this->arrival_from_date)).'" ');
     }
-    if(!empty($this->departure_date)){      
-      $criteria->compare('departure_date', date('Y-m-d', strtotime($this->departure_date)), true);      
+    if (!empty($this->arrival_to_date)) {
+      $criteria->addCondition('arrival_date <= "'.date('Y-m-d', strtotime($this->arrival_to_date)).'" ');
     }
-    if(!empty($this->created_date)){      
-      $criteria->compare('created_date', date('Y-m-d', strtotime($this->created_date)), true);      
+    if (!empty($this->departure_from_date)) {
+      $criteria->addCondition('departure_date >= "'.date('Y-m-d', strtotime($this->departure_from_date)).'" ');
+    }
+    if (!empty($this->departure_to_date)) {
+      $criteria->addCondition('departure_date <= "'.date('Y-m-d', strtotime($this->departure_to_date)).'" ');
+    }
+    if (!empty($this->created_from_date)) {
+      $criteria->addCondition('created_date >= "'.date('Y-m-d', strtotime($this->created_from_date)).'" ');
+    }
+    if (!empty($this->created_to_date)) {
+      $criteria->addCondition('created_date <= "'.date('Y-m-d', strtotime($this->created_to_date)).'" ');
     }
 
-    $pageSize=Yii::app()->user->getState('pageSize',Yii::app()->params['defaultPageSize']);
+    if (!empty($this->arrival_date)) {
+      $criteria->compare('arrival_date', date('Y-m-d', strtotime($this->arrival_date)), true);
+    }
+    if (!empty($this->departure_date)) {
+      $criteria->compare('departure_date', date('Y-m-d', strtotime($this->departure_date)), true);
+    }
+    if (!empty($this->created_date)) {
+      $criteria->compare('created_date', date('Y-m-d', strtotime($this->created_date)), true);
+    }
+
+    $pageSize = Yii::app()->user->getState('pageSize', Yii::app()->params['defaultPageSize']);
     return new CActiveDataProvider($this, array(
       'criteria' => $criteria,
       'sort' => array(
-            'defaultOrder' => array(
-                                      'id' =>true
-                              ),
+        'defaultOrder' => array(
+          'id' => true
         ),
+      ),
       'pagination' => array(
         'pageSize' => $pageSize,
       ),
@@ -229,9 +257,9 @@ class Booking extends CActiveRecord {
 
   public function afterFind() {
     $this->startDate = date('Y-m-d', strtotime($this->arrival_date));
-    $this->endDate  = date('Y-m-d', strtotime($this->departure_date));
+    $this->endDate = date('Y-m-d', strtotime($this->departure_date));
 
-    $this->dateRange = $this->startDate .' - ' . $this->endDate;
+    $this->dateRange = $this->startDate . ' - ' . $this->endDate;
 
     $date1 = new DateTime($this->startDate);
     $date2 = new DateTime($this->endDate);
