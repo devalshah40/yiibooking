@@ -70,8 +70,10 @@ class RoomsController extends Controller
 		if(isset($_POST['Rooms']))
 		{
 			$model->attributes=$_POST['Rooms'];
-			if($model->save())
+			if($model->save()) {
+        		Yii::app()->user->setFlash('success', "New Room is added successfully.");
 				$this->redirect(array('view','id'=>$model->id));
+			}
 		}
 
 		$this->render('create',array(

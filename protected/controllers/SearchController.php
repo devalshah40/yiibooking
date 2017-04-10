@@ -102,7 +102,8 @@ class SearchController extends Controller {
 //      var_dump($booking);
 //      exit;
       // validate user input and redirect to the previous page if valid
-      if ($model->validate() && $model->findRooms() && !$model->hasErrors() && $booking->validate() && $booking->saveBooking()) {
+      if ($model->validate() && $model->findRooms() && !$model->hasErrors() && $booking->validate() && ($booking_id = $booking->saveBooking())) {
+        $this->redirect(array('/booking/view','id' => $booking_id));
       }
     }
 

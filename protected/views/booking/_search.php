@@ -3,9 +3,53 @@
 /* @var $model Booking */
 /* @var $form CActiveForm */
 ?>
+<div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+          <!-- Horizontal Form -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Horizontal Form</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form class="form-horizontal">
+              <div class="box-body">
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="inputEmail3">Email</label>
 
-<div class="wide form">
+                  <div class="col-sm-10">
+                    <input type="email" placeholder="Email" id="inputEmail3" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="inputPassword3">Password</label>
 
+                  <div class="col-sm-10">
+                    <input type="password" placeholder="Password" id="inputPassword3" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox"> Remember me
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <button class="btn btn-default" type="submit">Cancel</button>
+                <button class="btn btn-info pull-right" type="submit">Sign in</button>
+              </div>
+              <!-- /.box-footer -->
+            </form>
+          </div>
+          <!-- /.box -->
+
+	</div>
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'action'=>Yii::app()->createUrl($this->route),
 	'method'=>'get',
@@ -48,12 +92,12 @@
 
 	<div class="row">
 		<?php echo $form->label($model,'arrival_date'); ?>
-		<?php echo $form->textField($model,'arrival_date'); ?>
+		<?php echo $form->textField($model,'arrival_date',array('id' => 'booking_arrival_date', 'class' => 'form-control', 'placeholder' => "Arrival date")); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->label($model,'departure_date'); ?>
-		<?php echo $form->textField($model,'departure_date'); ?>
+		<?php echo $form->textField($model,'departure_date',array('id' => 'booking_departure_date', 'class' => 'form-control', 'placeholder' => "Departure date")); ?>
 	</div>
 
 	<div class="row">
@@ -78,7 +122,7 @@
 
 	<div class="row">
 		<?php echo $form->label($model,'created_date'); ?>
-		<?php echo $form->textField($model,'created_date'); ?>
+		<?php echo $form->textField($model,'created_date',array('id' => 'booking_created_date', 'class' => 'form-control', 'placeholder' => "Created date")); ?>
 	</div>
 
 	<div class="row">

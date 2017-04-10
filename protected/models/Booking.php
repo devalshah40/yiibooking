@@ -86,7 +86,7 @@ class Booking extends CActiveRecord {
         'compareAttribute'=>'actual_amount',
         'operator'=>'<=',
         'allowEmpty'=>false ,
-        'message'=>'Deposit amount must be greater than Actual amount".'
+        'message'=>'Deposit amount must be less than or equal to Actual amount".'
       ),
       array('address, notes,rooms,noOfRooms', 'safe'),
       // The following rule is used by search().
@@ -166,21 +166,34 @@ class Booking extends CActiveRecord {
     $criteria->compare('pincode', $this->pincode, true);
     $criteria->compare('mobile_no', $this->mobile_no, true);
     $criteria->compare('email', $this->email, true);
-    $criteria->compare('arrival_date', $this->arrival_date, true);
-    $criteria->compare('departure_date', $this->departure_date, true);
     $criteria->compare('receipt_no', $this->receipt_no, true);
     $criteria->compare('deposit_amount', $this->deposit_amount, true);
     $criteria->compare('actual_amount', $this->actual_amount, true);
     $criteria->compare('notes', $this->notes, true);
-    $criteria->compare('created_date', $this->created_date, true);
     $criteria->compare('created_by', $this->created_by);
     $criteria->compare('updated_date', $this->updated_date, true);
     $criteria->compare('updated_by', $this->updated_by);
 
+    if(!empty($this->arrival_date)){
+      $criteria->compare('arrival_date', date('Y-m-d', strtotime($this->arrival_date)), true);      
+    }
+    if(!empty($this->departure_date)){      
+      $criteria->compare('departure_date', date('Y-m-d', strtotime($this->departure_date)), true);      
+    }
+    if(!empty($this->created_date)){      
+      $criteria->compare('created_date', date('Y-m-d', strtotime($this->created_date)), true);      
+    }
+
+    $pageSize=Yii::app()->user->getState('pageSize',Yii::app()->params['defaultPageSize']);
     return new CActiveDataProvider($this, array(
       'criteria' => $criteria,
+      'sort' => array(
+            'defaultOrder' => array(
+                                      'id' =>true
+                              ),
+        ),
       'pagination' => array(
-        'pageSize' => 10,
+        'pageSize' => $pageSize,
       ),
     ));
   }
@@ -304,30 +317,32 @@ class Booking extends CActiveRecord {
       $sql = "INSERT INTO `booking_details` (
                 `booking_id`,
                 `room_id`,
-                `number_count`
+                `number_count`,
+                `room_price`
             )
             VALUES
             (
               :booking_id,
               :room_id,
-              :number_count
+              :number_count,
+              :room_price
             )";
       $command = $connection->createCommand($sql);
 
       foreach ($this->rooms as $key => $room) {
+        $roomObj = Rooms::model()->findByPk($room);
         $command->bindValues(array(
           'booking_id' => $booking_id,
           'room_id' => $room,
-          'number_count' => $this->noOfRooms[$key]
+          'number_count' => $this->noOfRooms[$key],
+          'room_price' => $roomObj->room_price
         ));
         $command->execute();
       }
       $transaction->commit();
 
       Yii::app()->user->setFlash('success', "Booking is successfully done.");
-      $this->redirect(array('/booking/view','id' => $booking_id));
-
-      return true;
+      return $booking_id;
     } catch (Exception $e) // an exception is raised if a query fails
     {
       $transaction->rollback();

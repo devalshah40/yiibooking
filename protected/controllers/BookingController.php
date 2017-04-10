@@ -91,16 +91,21 @@ class BookingController extends Controller {
       $model->attributes = $_POST['Booking'];
 //      var_dump($oldNoOfRooms);
 //      var_dump($oldRooms);
-
-      $searchedRooms = array();
-      foreach ($oldNoOfRooms as $key => $oldNoOfRoom) {
-        $searchedRooms[$oldRooms[$key]] = $oldNoOfRoom;
-      }
+//
+//      $searchedRooms = array();
+//      foreach ($oldNoOfRooms as $key => $oldNoOfRoom) {
+//        $searchedRooms[$oldRooms[$key]] = $oldNoOfRoom;
+//      }
 
 //      var_dump($model);
 //      exit;
-      if ($model->save())
-        $this->redirect(array('view', 'id' => $model->id));
+      if ($model->save()) {
+        Yii::app()->user->setFlash('success', "Booking information is updated.");
+        $this->redirect(array('view','id'=>$model->id));
+      } else {
+        Yii::app()->user->setFlash('error', "Please try again. Booking information isn't updated.");
+        $this->redirect(array('view','id'=>$model->id));
+      }
     }
 
     $this->render('update', array(
@@ -116,6 +121,7 @@ class BookingController extends Controller {
   public function actionDelete($id) {
     $this->loadModel($id)->delete();
 
+    Yii::app()->user->setFlash('success', "Booking information is deleted.");
     // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
     if (!isset($_GET['ajax']))
       $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
@@ -152,6 +158,11 @@ class BookingController extends Controller {
       Yii::app()->user->setState('pageSize',(int) $_GET['pageSize']);
     }
 
+    if(Yii::app()->request->getParam('export')) {
+        $this->actionExport();
+        Yii::app()->end();
+    }
+
     $model = new Booking('search');
     $model->unsetAttributes();  // clear any default values
     if (isset($_GET['Booking']))
@@ -160,6 +171,75 @@ class BookingController extends Controller {
     $this->render('admin', array(
       'model' => $model,
     ));
+  }
+
+
+  public function actionExport()
+  {
+    $fp = fopen('php://temp', 'w');
+ 
+    /* 
+     * Write a header of csv file
+     */
+    $headers = array(
+        'Booking ID',
+        'Yatrik Name',
+        'City',
+        'Pincode',
+        'Pincode',
+        'Mobile No',
+        'Email',
+        'Rooms',
+        'Arrival Date',
+        'Departure Date',
+        'Receipt No',
+        'Deposit Amount',
+        'Actual Amount',
+        'Created Date',
+        'Created By'
+    );
+    fputcsv($fp,$headers);
+ 
+    /*
+     * Init dataProvider for first page
+     */
+    $model=new Booking('search');
+    $model->unsetAttributes();  // clear any default values
+    if(isset($_GET['Booking'])) {
+        $model->attributes=$_GET['Booking'];
+    }
+    $dp = $model->search();
+ 
+    /*
+     * Get models, write to a file, then change page and re-init DataProvider
+     * with next page and repeat writing again
+     */
+    while($models = $dp->getData()) {
+        foreach($models as $model) {
+            $row = array();
+            foreach($headers as $head) {
+                $row[] = CHtml::value($model,$head);
+            }
+            fputcsv($fp,$row);
+        }
+ 
+        unset($model,$dp,$pg);
+        $model=new MODEL('search');
+        $model->unsetAttributes();  // clear any default values
+        if(isset($_GET['MODEL']))
+            $model->attributes=$_GET['MODEL'];
+ 
+        $dp = $model->search();
+        $nextPage = $dp->getPagination()->getCurrentPage()+1;
+        $dp->getPagination()->setCurrentPage($nextPage);
+    }
+ 
+    /*
+     * save csv content to a Session
+     */
+    rewind($fp);
+    Yii::app()->user->setState('export',stream_get_contents($fp));
+    fclose($fp);
   }
 
   /**
@@ -189,4 +269,5 @@ class BookingController extends Controller {
       Yii::app()->end();
     }
   }
+
 }

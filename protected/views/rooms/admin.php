@@ -44,6 +44,18 @@ $('.change-pageSize').click(function(){
 		data: { pageSize: $(this).val() }
 	});
 });
+
+$('#form-reset-button').click(function()
+{
+   var id='rooms-grid';
+   var inputSelector='#'+id+' .filters input, '+'#'+id+' .filters select';
+   $(inputSelector).each( function(i,o) {
+        $(o).val('');
+   });
+   var data=$.param($(inputSelector));
+   $.fn.yiiGridView.update(id, {data: data});
+   return false;
+});
 ");
 ?>
 
@@ -52,6 +64,10 @@ $('.change-pageSize').click(function(){
     <div class="box">
       <div class="box-header">
         <h3 class="box-title">Manage Rooms</h3>
+        <span class="col-sm-10 pull-right">
+          <a href="<?php echo $this->createUrl("/rooms/create"); ?>" class="btn btn-info" role="button">Add Room</a>    
+          <a href="#" class="btn btn-info" role="button" id='form-reset-button'>Reset Filters</a>   
+        </span>    
       </div>
       <!-- /.box-header -->
       <div class="box-body" >

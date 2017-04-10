@@ -12,7 +12,7 @@
       <div class="box-header with-border">
         <h3 class="box-title">
           <?php //echo($model->isNewRecord ? 'Add' : 'Update') ?>
-          Fields with * are required.
+          Create Room
         </h3>
       </div>
       <!-- /.box-header -->

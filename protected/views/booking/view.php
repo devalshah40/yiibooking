@@ -85,14 +85,14 @@ $this->breadcrumbs = array(
           <tr>
             <th style="width: 150px"><?php echo CHtml::encode($model->getAttributeLabel('arrival_date')); ?></th>
             <td>
-              <?php echo CHtml::encode($model->arrival_date); ?>
+              <?php echo CHtml::encode(date('jS \of F, Y',strtotime($model->arrival_date))); ?>
             </td>
           </tr>
 
           <tr>
             <th style="width: 150px"><?php echo CHtml::encode($model->getAttributeLabel('departure_date')); ?></th>
             <td>
-              <?php echo CHtml::encode($model->departure_date); ?>
+              <?php echo CHtml::encode(date('jS \of F, Y',strtotime($model->departure_date))); ?>
             </td>
           </tr>
           <tr>
@@ -151,7 +151,7 @@ $this->breadcrumbs = array(
           <tr>
             <th style="width: 150px"><?php echo CHtml::encode($model->getAttributeLabel('created_date')); ?></th>
             <td>
-              <?php echo CHtml::encode($model->created_date); ?>
+              <?php echo CHtml::encode(date('jS \of F, Y h:i:s A',strtotime($model->created_date))); ?>
             </td>
           </tr>
           <tr>
@@ -161,13 +161,13 @@ $this->breadcrumbs = array(
             </td>
           </tr>
           <tr>
-            <th style="width: 150px"><?php echo CHtml::encode($model->getAttributeLabel('updated_date')); ?></th>
+            <th style="width: 150px">Last updated</th>
             <td>
-              <?php echo CHtml::encode($model->updated_date); ?>
+              <?php echo CHtml::encode(date('jS \of F, Y h:i:s A',strtotime($model->updated_date))); ?>
             </td>
           </tr>
           <tr>
-            <th style="width: 150px"><?php echo CHtml::encode($model->getAttributeLabel('updated_by')); ?></th>
+            <th style="width: 150px">Last updated</th>
             <td>
               <?php echo CHtml::encode($model->updated->name); ?>
             </td>

@@ -28,9 +28,9 @@ class Rooms extends CActiveRecord {
     // NOTE: you should only define rules for those attributes that
     // will receive user inputs.
     return array(
-      array('room_name, room_price, room_capacity, created_date, updated_date', 'required'),
-      array('room_capacity, room_status', 'numerical', 'integerOnly' => true),
-      array('room_price', 'numerical'),
+      array('room_name, room_price, room_capacity', 'required'),
+      array('room_capacity, room_status', 'numerical', 'integerOnly' => true, 'min'=>1),
+      array('room_price', 'numerical', 'min'=>1),
       array('room_name', 'length', 'max' => 255),
       array('room_price', 'length', 'max' => 10),
       array('room_info', 'safe'),
@@ -119,6 +119,22 @@ class Rooms extends CActiveRecord {
    */
   public static function model($className = __CLASS__) {
     return parent::model($className);
+  }
+
+  /**
+   * This is invoked before the record is saved.
+   * @return boolean whether the record should be saved.
+   */
+  protected function beforeSave() {
+    if (parent::beforeSave()) {
+      if ($this->isNewRecord) {
+        $this->created_date = $this->updated_date = date('Y-m-d H:i:s');
+      } else {
+        $this->updated_date = date('Y-m-d H:i:s');
+      }
+      return true;
+    } else
+      return false;
   }
 
   public static function getRooms() {

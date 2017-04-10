@@ -27,14 +27,6 @@ $this->menu = array(
   array('label' => 'Create Booking', 'url' => array('create')),
 );
 
-$datePickerJs = <<<EOD
-    //Date picker
-    $('.datepicker').datepicker({
-      autoclose: true
-    });
-EOD;
-
-Yii::app()->clientScript->registerScript('datePicker', $datePickerJs, CClientScript::POS_READY);
 
 
 Yii::app()->clientScript->registerScript('search', "
@@ -48,17 +40,50 @@ $('.search-form form').submit(function(){
 	});
 	return false;
 });
-");
 
+$('#form-reset-button').click(function()
+{
+   var id='booking-grid';
+   var inputSelector='#'+id+' .filters input, '+'#'+id+' .filters select';
+   $(inputSelector).each( function(i,o) {
+        $(o).val('');
+   });
+   var data=$.param($(inputSelector));
+   $.fn.yiiGridView.update(id, {data: data});
+   return false;
+});
 
-Yii::app()->clientScript->registerScript('re-install-date-picker', "
-function reinstallDatePicker(id, data) {
-        //use the same parameters that you had set in your widget else the datepicker will be refreshed by default
-    $('#datepicker_for_due_date').datepicker();
+$('#export-button').on('click',function() {
+    $.fn.yiiGridView.export();
+});
+$.fn.yiiGridView.export = function() {
+    $.fn.yiiGridView.update('booking-grid',{ 
+        success: function() {
+            $('#booking-grid').removeClass('grid-view-loading');
+            window.location = '". $this->createUrl('exportFile')  . "';
+        },
+        data: $('.search-form form').serialize() + '&export=true'
+    });
 }
+
 ");
 ?>
 
+<?php
+
+$reinstalldatepicker = <<<EOD
+function reinstallDatePicker(id, data) {
+$('.datepicker').datepicker(
+    {'showOn':'focus',
+    'dateFormat':'dd-mm-yy',
+    'showOtherMonths':true,'selectOtherMonths':true,'changeMonth':true,
+    'changeYear':true,'showButtonPanel':true
+});
+}
+EOD;
+
+Yii::app()->clientScript->registerScript('reinstallDatePicker', $reinstalldatepicker);
+?>
 <h1>Manage Bookings</h1>
 
 <p>
@@ -78,41 +103,46 @@ function reinstallDatePicker(id, data) {
     <div class="box">
       <div class="box-header">
         <h3 class="box-title">Manage Bookings</h3>
+        <span class="col-sm-10 pull-right">          
+          <a href="#" class="btn btn-info" role="button" id='export-button'>Export CSV</a>   
+          <a href="#" class="btn btn-info" role="button" id='form-reset-button'>Reset Filters</a>   
+        </span> 
       </div>
       <!-- /.box-header -->
       <div class="box-body">
 
+        <div class="row">
             <?php $this->widget('zii.widgets.grid.CGridView', array(
               'id' => 'booking-grid',
               'itemsCssClass' => 'table table-bordered table-striped dataTable',
               'loadingCssClass' => 'overlay-wrapper',
               'beforeAjaxUpdate'=> 'js:function(id,options){
                 $("#booking-grid").append(\'<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>\');
-                console.log($(this));
               }',
+              'htmlOptions' => array('class' => 'grid-view col-sm-12'),
+              'enablePagination' => false,
 
+              'ajaxUpdate' => 'example1_paginate',
               'afterAjaxUpdate' => 'reinstallDatePicker', // (#1)
-              'dataProvider' => $model->search(),
+              'dataProvider' => $dataProvider,
               'filter' => $model,
               'columns' => array(
                 'id',
                 'yatrik_name',
                 'city',
                 array(
-                  'name' => 'created_date',
-                  'value' => 'date("d-m-Y",strtotime($data->created_date))',
+                  'name' => 'arrival_date',
+                  'value' => 'date("d-m-Y",strtotime($data->arrival_date))',
                   'filter' => $this->widget('zii.widgets.jui.CJuiDatePicker', array(
                     'model'=>$model,
-                    'attribute'=>'created_date',
-                    'language' => 'en-GB',
-                    // 'i18nScriptFile' => 'jquery.ui.datepicker-ja.js', (#2)
+                    'attribute'=>'arrival_date',
                     'htmlOptions' => array(
-                      'id' => 'datepicker_for_due_date',
+                      'class' => 'datepicker',
                       'size' => '10',
                     ),
-                    'defaultOptions' => array(  // (#3)
+                    'options' => array(
                       'showOn' => 'focus',
-                      'dateFormat' => 'yy/mm/dd',
+                      'dateFormat' => 'dd-mm-yy',
                       'showOtherMonths' => true,
                       'selectOtherMonths' => true,
                       'changeMonth' => true,
@@ -120,17 +150,54 @@ function reinstallDatePicker(id, data) {
                       'showButtonPanel' => true,
                     )
                   ),
-                    true), // (#4)
+                   true), // (#4)
                 ),
-                'arrival_date',
-                'departure_date',
+                array(
+                  'name' => 'departure_date',
+                  'value' => 'date("d-m-Y",strtotime($data->departure_date))',
+                  'filter' => $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                    'model'=>$model,
+                    'attribute'=>'departure_date',
+                    'htmlOptions' => array(
+                      'class' => 'datepicker',
+                      'size' => '10',
+                    ),
+                    'options' => array(
+                      'showOn' => 'focus',
+                      'dateFormat' => 'dd-mm-yy',
+                      'showOtherMonths' => true,
+                      'selectOtherMonths' => true,
+                      'changeMonth' => true,
+                      'changeYear' => true,
+                      'showButtonPanel' => true,
+                    )
+                  ),
+                   true), // (#4)
+                ),
                 'receipt_no',
                 'deposit_amount',
                 'actual_amount',
-                array(
+                 array(
                   'name' => 'created_date',
                   'value' => 'date("d-m-Y",strtotime($data->created_date))',
-                  //'filter'=> array(1 => 'Active', 0 => 'Inactive')
+                  'filter' => $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                    'model'=>$model,
+                    'attribute'=>'created_date',
+                    'htmlOptions' => array(
+                      'class' => 'datepicker',
+                      'size' => '10',
+                    ),
+                    'options' => array(
+                      'showOn' => 'focus',
+                      'dateFormat' => 'dd-mm-yy',
+                      'showOtherMonths' => true,
+                      'selectOtherMonths' => true,
+                      'changeMonth' => true,
+                      'changeYear' => true,
+                      'showButtonPanel' => true,
+                    )
+                  ),
+                   true), // (#4)
                 ),
                 array(
                   'name' => 'created_by',
@@ -141,7 +208,7 @@ function reinstallDatePicker(id, data) {
                   'class' => 'CButtonColumn',
                 ),
               ),
-              'pager' => array(
+              /*'pager' => array(
                 'class' => 'CLinkPager',
                 'hiddenPageCssClass' => 'paginate_button disabled',
 //            'firstPageCssClass' => 'next hidden',
@@ -158,9 +225,44 @@ function reinstallDatePicker(id, data) {
                   'class' => 'pagination'
                 )
               ),
-              'pagerCssClass' => 'dataTables_paginate paging_simple_numbers',
+              'pagerCssClass' => 'dataTables_paginate paging_simple_numbers',*/
             )); ?>
       </div>
+      
+      <div class="row">
+            <div class="col-sm-5">
+              <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">
+                <label>
+                 Show <?php echo $pageSizeDropDown; ?> entries</label>
+              </div>
+            </div>
+            <div class="col-sm-7">
+              <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+              <?php $this->widget('CLinkPager', array(
+                'pages' => $dataProvider->pagination,
+
+
+                'hiddenPageCssClass' => 'paginate_button disabled',
+                //            'firstPageCssClass' => 'next hidden',
+                //            'lastPageCssClass' => 'last hidden',
+                'selectedPageCssClass' => 'active',
+                'internalPageCssClass' => 'paginate_button ',
+                'maxButtonCount'=> 6,
+                'header' => '',
+                'prevPageLabel' => 'Previous',
+                'nextPageLabel' => 'Next',
+                'firstPageLabel'=>'First',
+                'lastPageLabel'=>'Last',
+                'htmlOptions' => array(
+                  'class' => 'pagination'
+                )
+              )); ?>
+              </div>
+            </div>
+          </div>
+      </div>
+
+        </div>
     </div>
   </div>
   </div>
