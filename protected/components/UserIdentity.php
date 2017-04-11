@@ -24,6 +24,8 @@ class UserIdentity extends CUserIdentity {
     } else {
       $user = User::model()->findByAttributes(array('username' => $this->username));
     }
+    $this->setState('name', ucfirst(strtolower($user->first_name)). " ". ucfirst(strtolower($user->last_name)));
+
     if ($user === null)
       if (strpos($this->username, "@")) {
         $this->errorCode = self::ERROR_EMAIL_INVALID;

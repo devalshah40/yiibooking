@@ -50,7 +50,7 @@ class LoginForm extends CFormModel {
       $identity->authenticate();
       switch ($identity->errorCode) {
         case UserIdentity::ERROR_NONE:
-          $duration = $this->rememberMe ? Yii::app()->controller->module->rememberMeTime : 0;
+          $duration = $this->rememberMe ? 3600*24*30 : 0;
           Yii::app()->user->login($identity, $duration);
           break;
         case UserIdentity::ERROR_EMAIL_INVALID:

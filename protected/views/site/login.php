@@ -26,7 +26,10 @@
       <div class="col-xs-8">
         <div class="checkbox icheck">
           <label>
-            <input type="checkbox"> Remember Me
+
+            <?php echo $form->checkBox($model,'rememberMe'); ?>
+
+            Remember Me
           </label>
         </div>
       </div>

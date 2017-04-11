@@ -180,5 +180,10 @@ return array(
     'replyToEmail' => 'info@girnar.com',
     'defaultPageSize' => 2,
     'pageSizeOptions' => array(2=>2,10=>10,20=>20,50=>50,100=>100),
-  ),
+    'footer_name' => 'Shree Siddhi Kailash Yatrik Bhavan',
+    'footer_address' => array(
+                        'Rupaytan road,Opp. Minraj school,',
+                        'Bhavnath taleti,Junagadh'
+    )
+  )
 );

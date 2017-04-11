@@ -84,7 +84,7 @@ class User extends CActiveRecord
 	}
 
   public function getName() {
-    return $this->first_name. " ". $this->last_name;
+    return ucfirst(strtolower($this->first_name)). " ". ucfirst(strtolower($this->last_name));
   }
     /**
 	 * Retrieves a list of models based on the current search/filter conditions.

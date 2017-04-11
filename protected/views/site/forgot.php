@@ -9,18 +9,8 @@ Yii::app()->clientScript
   ->registerCoreScript('jquery')
   ->registerScript("forgot","
         $('.drilldown_close').on('click',function(){
-            $('#modal').hide().find('#message').text('');
-            preLoader('hide');
+            $('#myModal').hide().find('#message').text('');
         });
-
-        function preLoader(v){
-        var bg = $('.background_loader');
-        if(v == 'show'){
-            bg.addClass('show');
-        }else{
-            bg.removeClass('show');
-        }
-    }
     ");
 
 ?>
@@ -35,7 +25,6 @@ Yii::app()->clientScript
     <?php $form = $this->beginWidget('CActiveForm', array(
       'id' => 'forgot-form',
       'action' => CController::createUrl('site/forgot')
-      //'htmlOptions'=>array('class'=>'form-signin')
     )); ?>
 
     <?php echo $form->errorSummary($model, null, '', array('class' => 'alert alert-error')); ?>
@@ -51,7 +40,7 @@ Yii::app()->clientScript
     </div>
     <div class="row">
       <div class="col-xs-4">
-        <a href="<?= Yii::app()->createUrl('site/login'); ?>" class="auth_link">Cancel</a>
+        <a href="<?= Yii::app()->createUrl('site/login'); ?>" class="btn btn-primary btn-block btn-flat">Cancel</a>
       </div>
       <!-- /.col -->
       <div class="col-xs-4">
@@ -59,10 +48,10 @@ Yii::app()->clientScript
           'type'=>'POST',
           'url'=>Yii::app()->createUrl('site/forgot'),
           'beforeSend' => 'function(){
-                preLoader("show");
+          
             }',
           'success'=>'function(data) {
-                $("#modal").show().find("#message").text(data);
+                $("#myModal").modal().find("#message").text(data);
             }',)
         )); ?>
       </div>
@@ -74,3 +63,21 @@ Yii::app()->clientScript
   <!-- /.login-box-body -->
 </div>
 <!-- /.login-box -->
+
+  <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button aria-label="Close" data-dismiss="modal" class="close" type="button">
+            <span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">Password recovery</h4>
+        </div>
+        <div class="modal-body">
+          <p id="message">Such email is not registered in the system</p>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
