@@ -341,6 +341,7 @@ class Booking extends CActiveRecord {
       $command->execute();
 
       $booking_id = $connection->getLastInsertID();
+      $this->id = $booking_id;
 
       $sql = "INSERT INTO `booking_details` (
                 `booking_id`,
@@ -375,6 +376,57 @@ class Booking extends CActiveRecord {
     {
       $transaction->rollback();
       return false;
+    }
+  }
+
+  public function sendMail(){
+    Yii::app()->mailer->IsSMTP(); // telling the class to use SMTP
+//        Yii::app()->mailer->Host       = "smtp.gmail.com"; // SMTP server
+//        Yii::app()->mailer->SMTPDebug  = 2;                     // enables SMTP debug information (for testing)
+    // 1 = errors and messages
+    // 2 = messages only
+    Yii::app()->mailer->SMTPAuth   = true;                  // enable SMTP authentication
+    Yii::app()->mailer->SMTPSecure = "tls";                 // sets the prefix to the servier
+    Yii::app()->mailer->Host       = "smtp.gmail.com";      // sets GMAIL as the SMTP server
+    Yii::app()->mailer->Port       = 587;                   // set the SMTP port for the GMAIL server
+    Yii::app()->mailer->Username   = "devalshah21@gmail.com";  // GMAIL username
+    Yii::app()->mailer->Password   = "Kangana!@#";            // GMAIL password
+
+//        Yii::app()->mailer->SetFrom('name@yourdomain.com', 'First Last');
+//
+//        Yii::app()->mailer->AddReplyTo("name@yourdomain.com","First Last");
+//
+//        Yii::app()->mailer->Subject    = "PHPMailer Test Subject via smtp (Gmail), basic";
+//
+//        Yii::app()->mailer->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
+//
+//        Yii::app()->mailer->MsgHTML($body);
+
+//        $address = "whoto@otherdomain.com";
+//        Yii::app()->mailer->AddAddress($address, "John Doe");
+//
+//        Yii::app()->mailer->AddAttachment("images/phpmailer.gif");      // attachment
+//        Yii::app()->mailer->AddAttachment("images/phpmailer_mini.gif"); // attachment
+
+    $users = User::model()->findByAttributes(array('status' => 1));
+    var_dump($users);exit;
+
+    Yii::app()->mailer->From = Yii::app()->params['replyToEmail'];
+    Yii::app()->mailer->FromName = Yii::app()->name;
+    Yii::app()->mailer->AddAddress($this->email);
+    Yii::app()->mailer->Subject = 'Reset Password';
+    Yii::app()->mailer->isHTML(true);
+    Yii::app()->mailer->getView('receipt', array('booking' => $this,'user' => $user,'title' => "Reset password"),'html');
+
+    if(!Yii::app()->mailer->Send())
+    {
+      echo "Mailer Error: " . Yii::app()->mailer->ErrorInfo;
+    }
+    else
+    {
+
+      $user->password = md5($new_password);
+      $user->save();
     }
   }
 }

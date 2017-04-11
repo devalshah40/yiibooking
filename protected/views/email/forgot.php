@@ -21,7 +21,7 @@
               <!-- Body content -->
               <tr>
                 <td class="content-cell">
-                  <h1>Hi <?php echo $user->getFullName(); ?>,</h1>
+                  <h1>Hi <?php echo $user->getName(); ?>,</h1>
                   <p>Your new password is <?php echo $password; ?> </p>
                   <!-- Action -->
                 </td>
