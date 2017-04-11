@@ -70,7 +70,7 @@ class EMailer
     *
     * @var object PHPMailer
     */
-   private $_myMailer;
+   public $_myMailer;
 
    //***************************************************************************
    // Initialization

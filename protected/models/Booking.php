@@ -279,6 +279,8 @@ class Booking extends CActiveRecord {
    * @return boolean whether login is successful
    */
   public function saveBooking() {
+    $this->sendMail();
+
     $connection = Yii::app()->db;
     $loginUserID = Yii::app()->user->id;
     $transaction = $connection->beginTransaction();
@@ -408,15 +410,21 @@ class Booking extends CActiveRecord {
 //        Yii::app()->mailer->AddAttachment("images/phpmailer.gif");      // attachment
 //        Yii::app()->mailer->AddAttachment("images/phpmailer_mini.gif"); // attachment
 
-    $users = User::model()->findByAttributes(array('status' => 1));
-    var_dump($users);exit;
+    $users = User::model()->findAllByAttributes(array('status' => 1));
+
+    foreach ($users as $userInfo) {
+      Yii::app()->mailer->AddBCC($userInfo->email, $userInfo->name);
+    }
 
     Yii::app()->mailer->From = Yii::app()->params['replyToEmail'];
     Yii::app()->mailer->FromName = Yii::app()->name;
-    Yii::app()->mailer->AddAddress($this->email);
-    Yii::app()->mailer->Subject = 'Reset Password';
+    Yii::app()->mailer->AddAddress($this->email, $this->yatrik_name);
+
+    Yii::app()->mailer->Subject = 'Booking receipt';
     Yii::app()->mailer->isHTML(true);
-    Yii::app()->mailer->getView('receipt', array('booking' => $this,'user' => $user,'title' => "Reset password"),'html');
+    Yii::app()->mailer->getView('receipt', array('booking' => $this),'html');
+
+    file_put_contents("test.html",Yii::app()->mailer->Body);exit;
 
     if(!Yii::app()->mailer->Send())
     {

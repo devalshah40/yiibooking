@@ -17,15 +17,15 @@
               <!-- Body content -->
               <tr>
                 <td class="content-cell">
-                  <h1>Hi {{name}},</h1>
-                  <p>Thanks for booking at Girnar Dharamshala. This email is the receipt for your purchase. No payment is due.</p>
+                  <h1>Hi <?php echo $booking->yatrik_name; ?>,</h1>
+                  <p>Thanks for booking at Girnar Dharamshala. This email is the receipt for your purchase.</p>
 
                   <table class="purchase" width="100%" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                        <h3>{{receipt_id}}</h3></td>
+                        <h3><?php echo $booking->receipt_no; ?></h3></td>
                       <td>
-                        <h3 class="align-right">{{date}}</h3></td>
+                        <h3 class="align-right"><?php echo date('Y-m-d'); ?></h3></td>
                     </tr>
                     <tr>
                       <td colspan="2">
@@ -38,18 +38,40 @@
                               <p class="align-right">Amount</p>
                             </th>
                           </tr>
-                          {{#each receipt_details}}
-                          <tr>
-                            <td width="80%" class="purchase_item">{{description}}</td>
-                            <td class="align-right" width="20%" class="purchase_item">{{amount}}</td>
-                          </tr>
-                          {{/each}}
+
+                          <?php
+                              $total_price = 0;
+                              $date1 = new DateTime($booking->arrival_date);
+                              $date2 = new DateTime($booking->departure_date);
+
+                              $booking->noOfDays = $date2->diff($date1)->format("%a");
+
+                              foreach ($booking->rooms as $key => $room) {
+                                $roomObj = Rooms::model()->findByPk($room);
+                          ?>
+                            <tr>
+                              <td width="80%" class="purchase_item">
+                                <?php
+                                echo $booking->noOfRooms[$key] .' ' . $roomObj->room_name;
+                                ?>
+                              </td>
+                              <td class="align-right" width="20%" class="purchase_item">
+                                <?php
+                                $total_price += $booking->noOfDays * $roomObj->room_price * $booking->noOfRooms[$key];
+                                echo $booking->noOfDays * $roomObj->room_price * $booking->noOfRooms[$key];
+                                ?>
+                              </td>
+                            </tr>
+                          <?php
+                              }
+                          ?>
+
                           <tr>
                             <td width="80%" class="purchase_footer" valign="middle">
                               <p class="purchase_total purchase_total--label">Total</p>
                             </td>
                             <td width="20%" class="purchase_footer" valign="middle">
-                              <p class="purchase_total">{{total}}</p>
+                              <p class="purchase_total"><?php echo $total_price; ?></p>
                             </td>
                           </tr>
                         </table>
