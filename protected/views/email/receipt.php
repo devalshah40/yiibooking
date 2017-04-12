@@ -18,15 +18,49 @@
               <tr>
                 <td class="content-cell">
                   <h1>Hi <?php echo $booking->yatrik_name; ?>,</h1>
-                  <p>Thanks for booking at Girnar Dharamshala. This email is the receipt for your purchase.</p>
+                  <p>Thanks for booking at Girnar Dharamshala. This email is the receipt for your booking.</p>
+
+                  <table width="100%" cellspacing="0" cellpadding="0" class="attribute-list">
+                    <tbody>
+                      <tr>
+                        <td class="attribute-list-container">
+                          <table width="100%" cellspacing="0" cellpadding="0">
+                            <tbody>
+                              <tr>
+                                <td class="attribute-list-item"><strong>Booking ID:</strong> <?php echo $booking->id; ?></td>
+                              </tr>
+                              <tr>
+                                <td class="attribute-list-item"><strong>Receipt No:</strong> <?php echo $booking->receipt_no; ?></td>
+                              </tr>
+                              <tr>
+                                <td class="attribute-list-item"><strong>Yatrik Name:</strong> <?php echo $booking->yatrik_name; ?></td>
+                              </tr>
+                              <tr>
+                                <td class="attribute-list-item"><strong>Address:</strong> <?php echo $booking->address; ?></td>
+                              </tr>
+                              <tr>
+                                <td class="attribute-list-item"><strong>City:</strong> <?php echo $booking->city; ?></td>
+                              </tr>
+                              <tr>
+                                <td class="attribute-list-item"><strong>Mobile no:</strong> <?php echo $booking->mobile_no; ?></td>
+                              </tr>
+                              <tr>
+                                <td class="attribute-list-item"><strong>Email:</strong> <?php echo $booking->email; ?></td>
+                              </tr>
+                              <tr>
+                                <td class="attribute-list-item"><strong>Arrival date:</strong> <?php echo date('d-m-Y', strtotime($booking->arrival_date)); ?></td>
+                              </tr>
+                              <tr>
+                                <td class="attribute-list-item"><strong>Departure date:</strong> <?php echo date('d-m-Y', strtotime($booking->departure_date)); ?></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
 
                   <table class="purchase" width="100%" cellpadding="0" cellspacing="0">
-                    <tr>
-                      <td>
-                        <h3><?php echo $booking->receipt_no; ?></h3></td>
-                      <td>
-                        <h3 class="align-right"><?php echo date('Y-m-d'); ?></h3></td>
-                    </tr>
                     <tr>
                       <td colspan="2">
                         <table class="purchase_content" width="100%" cellpadding="0" cellspacing="0">
@@ -72,6 +106,22 @@
                             </td>
                             <td width="20%" class="purchase_footer" valign="middle">
                               <p class="purchase_total"><?php echo $total_price; ?></p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td width="80%" class="purchase_footer" valign="middle">
+                              <p class="purchase_total purchase_total--label">Paid Amount</p>
+                            </td>
+                            <td width="20%" class="purchase_footer" valign="middle">
+                              <p class="purchase_total"><?php echo $booking->deposit_amount; ?></p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td width="80%" class="purchase_footer" valign="middle">
+                              <p class="purchase_total purchase_total--label">Amount Due</p>
+                            </td>
+                            <td width="20%" class="purchase_footer" valign="middle">
+                              <p class="purchase_total"><?php echo ($total_price - $booking->deposit_amount); ?></p>
                             </td>
                           </tr>
                         </table>

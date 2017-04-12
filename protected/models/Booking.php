@@ -279,8 +279,6 @@ class Booking extends CActiveRecord {
    * @return boolean whether login is successful
    */
   public function saveBooking() {
-    $this->sendMail();
-
     $connection = Yii::app()->db;
     $loginUserID = Yii::app()->user->id;
     $transaction = $connection->beginTransaction();
@@ -372,6 +370,8 @@ class Booking extends CActiveRecord {
       }
       $transaction->commit();
 
+      $this->sendMail();
+
       Yii::app()->user->setFlash('success', "Booking is successfully done.");
       return $booking_id;
     } catch (Exception $e) // an exception is raised if a query fails
@@ -424,8 +424,6 @@ class Booking extends CActiveRecord {
     Yii::app()->mailer->isHTML(true);
     Yii::app()->mailer->getView('receipt', array('booking' => $this),'html');
 
-    file_put_contents("test.html",Yii::app()->mailer->Body);exit;
-
     if(!Yii::app()->mailer->Send())
     {
       echo "Mailer Error: " . Yii::app()->mailer->ErrorInfo;
@@ -433,8 +431,6 @@ class Booking extends CActiveRecord {
     else
     {
 
-      $user->password = md5($new_password);
-      $user->save();
     }
   }
 }
