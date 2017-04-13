@@ -266,4 +266,3 @@ Yii::app()->clientScript->registerScript('reinstallDatePicker', $reinstalldatepi
         </div>
     </div>
   </div>
-  </div>
