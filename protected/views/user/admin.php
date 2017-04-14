@@ -87,7 +87,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 				<div class="row">
 					<?php $this->widget('zii.widgets.grid.CGridView', array(
 						'id'=>'user-grid',
-						'htmlOptions' => array('class' => 'col-sm-12'),
+						'htmlOptions' => array('class' => 'grid-view col-sm-12'),
 						'itemsCssClass' => 'table table-bordered table-striped dataTable',
 						'loadingCssClass' => 'overlay-wrapper',
 						'beforeAjaxUpdate'=> 'js:function(id,options){
@@ -171,6 +171,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 					</div>
 				</div>
 			</div>
+
 		</div>
 	</div>
 </div>

@@ -11,8 +11,7 @@
     <div class="box box-info">
       <div class="box-header with-border">
         <h3 class="box-title">
-          <?php //echo($model->isNewRecord ? 'Add' : 'Update') ?>
-          Create Room
+          <?php echo ($model->isNewRecord ? 'Create' : 'Update') ?> Room
         </h3>
       </div>
       <!-- /.box-header -->
