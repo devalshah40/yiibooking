@@ -128,12 +128,53 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 								'value' => '($data->status == 1) ? "Active" : "Inactive"',
 								'filter'=> array(1 => 'Active', 0 => 'Inactive')
 							),
-							/*'create_at',
-							'lastvisit_at',
-							'status',
-							*/
 							array(
 								'class'=>'CButtonColumn',
+								'template' => '{view} {update} {delete}',
+								'afterDelete'=>'function(link,success,data){ if(success) alert("Delete completed successfully"); }',
+								'buttons'=>array
+								(
+									'view' => array
+									(
+										'label'=>'<span class="glyphicon glyphicon-search"></span>',
+										'options'=>array( 'class' => 'btn btn-primary view btn-xs', 'title' => 'View user details'),
+										'imageUrl'=> false,
+										'url' => function($data) {
+											return Yii::app()->controller->createUrl('view', ['id' => $data->id]);
+										},
+										'click' => new CJavaScriptExpression('function() {
+                        jQuery.yii.submitForm(document.body, $(this).attr("href"), {});
+                        return false;
+                    }'),
+									),
+									'update' => array
+									(
+										'label'=>'<span class="glyphicon glyphicon-pencil"></span>',
+										'options'=>array( 'class' => 'btn btn-primary update btn-xs', 'title' => 'Update user details'),
+										'imageUrl'=> false,
+										'url' => function($data) {
+											return Yii::app()->controller->createUrl('update', ['id' => $data->id]);
+										},
+										'click' => new CJavaScriptExpression('function() {
+                        jQuery.yii.submitForm(document.body, $(this).attr("href"), {});
+                        return false;
+                    }'),
+									),
+									'delete' => array
+									(
+										'label'=>'<span class="glyphicon glyphicon-remove"></span>',
+										'options'=>array( 'class' => 'btn btn-primary btn-danger btn-xs', 'title' => 'Delete user'),
+										'imageUrl'=> false,
+										'visible'=> '($data->id != 1)',
+//										'url' => function($data) {
+//											return Yii::app()->controller->createUrl('delete', ['id' => $data->id]);
+//										},
+//										'click' => new CJavaScriptExpression('function() {
+//                        jQuery.yii.submitForm(document.body, $(this).attr("href"), {});
+//                        return false;
+//                    }'),
+									),
+								),
 							),
 						),
 					)); ?>

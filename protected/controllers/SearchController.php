@@ -24,10 +24,10 @@ class SearchController extends Controller {
    */
   public function accessRules() {
     return array(
-      array('allow',  // allow all users to perform 'index' and 'view' actions
-        'actions' => array('error', 'login', 'forgot', 'contact'),
-        'users' => array('*'),
-      ),
+//      array('allow',  // allow all users to perform 'index' and 'view' actions
+//        'actions' => array('error', 'login', 'forgot', 'contact'),
+//        'users' => array('*'),
+//      ),
       array('allow', // allow authenticated users to access all actions
         'users' => array('@'),
       ),

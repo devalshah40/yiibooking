@@ -122,7 +122,44 @@ $('#form-reset-button').click(function()
                 'updated_date',
                 */
                 array(
-                  'class' => 'CButtonColumn',
+                  'class'=>'CButtonColumn',
+                  'template' => '{view} {update} {delete}',
+                  'afterDelete'=>'function(link,success,data){ if(success) alert("Delete completed successfully"); }',
+                  'buttons'=>array
+                  (
+                    'view' => array
+                    (
+                      'label'=>'<span class="glyphicon glyphicon-search"></span>',
+                      'options'=>array( 'class' => 'btn btn-primary view btn-xs', 'title' => 'View room details'),
+                      'imageUrl'=> false,
+                      'url' => function($data) {
+                        return Yii::app()->controller->createUrl('view', ['id' => $data->id]);
+                      },
+                      'click' => new CJavaScriptExpression('function() {
+                        jQuery.yii.submitForm(document.body, $(this).attr("href"), {});
+                        return false;
+                    }'),
+                    ),
+                    'update' => array
+                    (
+                      'label'=>'<span class="glyphicon glyphicon-pencil"></span>',
+                      'options'=>array( 'class' => 'btn btn-primary update btn-xs', 'title' => 'Update room details'),
+                      'imageUrl'=> false,
+                      'url' => function($data) {
+                        return Yii::app()->controller->createUrl('update', ['id' => $data->id]);
+                      },
+                      'click' => new CJavaScriptExpression('function() {
+                        jQuery.yii.submitForm(document.body, $(this).attr("href"), {});
+                        return false;
+                    }'),
+                    ),
+                    'delete' => array
+                    (
+                      'label'=>'<span class="glyphicon glyphicon-remove"></span>',
+                      'options'=>array( 'class' => 'btn btn-primary btn-danger btn-xs', 'title' => 'Delete room'),
+                      'imageUrl'=> false,
+                    ),
+                  ),
                 ),
               ),
             )); ?>

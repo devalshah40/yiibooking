@@ -38,12 +38,15 @@ $('.search-form form').submit(function(){
 	$('#booking-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
-	$('.search-form').toggle();
+	$('.search-form').toggle(); 
 	return false;
 });
 
 $('#form-reset-button').click(function()
 {
+
+	$('.search-form').toggle();
+   $('#search_form')[0].reset();
    var id='booking-grid';
    var inputSelector='#'+id+' .filters input, '+'#'+id+' .filters select';
    $(inputSelector).each( function(i,o) {
@@ -55,15 +58,16 @@ $('#form-reset-button').click(function()
 });
 
 $('#export-button').on('click',function() {
-    $.fn.yiiGridView.export();
+    $.fn.yiiGridView.export();    
 });
+
 $.fn.yiiGridView.export = function() {
     $.fn.yiiGridView.update('booking-grid',{ 
         success: function() {
-            $('#booking-grid').removeClass('grid-view-loading');
-            window.location = '". $this->createUrl('exportFile')  . "';
+            $('.overlay').remove();
+            window.location = '". $this->createUrl('exportfile')  . "';
         },
-        data: $('.search-form form').serialize() + '&export=true'
+        data: $('.search-form form').serialize() + '&export=1' + $.param($('#booking-grid .filters input, #booking-grid .filters select'))
     });
 }
 
@@ -206,7 +210,52 @@ Yii::app()->clientScript->registerScript('reinstallDatePicker', $reinstalldatepi
                   'filter'=> CHtml::listData(User::model()->findAll(),'id','name'),
                 ),
                 array(
-                  'class' => 'CButtonColumn',
+                  'header' => 'Room Details',
+                  'type' => 'raw',
+                  'value' => '$data->booked_room_details',
+                ),
+                array(
+                  'class'=>'CButtonColumn',
+                  'template' => '{view} {update} {delete}',
+                  'afterDelete'=>'function(link,success,data){ if(success) alert("Delete completed successfully"); }',
+                  'buttons'=>array
+                  (
+                    'view' => array
+                    (
+                      'label'=>'<span class="glyphicon glyphicon-search"></span>',
+                      'options'=>array( 'class' => 'btn btn-primary view btn-xs', 'title' => 'View booking details'),
+                      'imageUrl'=> false,
+                      'url' => function($data) {
+                        return Yii::app()->controller->createUrl('view', ['id' => $data->id]);
+                      },
+                      'click' => new CJavaScriptExpression('function() {
+                        jQuery.yii.submitForm(document.body, $(this).attr("href"), {});
+                        return false;
+                    }'),
+                    ),
+                    'update' => array
+                    (
+                      'label'=>'<span class="glyphicon glyphicon-pencil"></span>',
+                      'options'=>array( 'class' => 'btn btn-primary update btn-xs', 'title' => 'Update booking details'),
+                      'imageUrl'=> false,
+                      'url' => function($data) {
+                        return Yii::app()->controller->createUrl('update', ['id' => $data->id]);
+                      },
+                      'click' => new CJavaScriptExpression('function() {
+                        jQuery.yii.submitForm(document.body, $(this).attr("href"), {});
+                        return false;
+                      }'
+                      ),
+                      'visible'=> '(Yii::app()->user->id == 1 || $data->created_by == Yii::app()->user->id)',
+                    ),
+                    'delete' => array
+                    (
+                      'label'=>'<span class="glyphicon glyphicon-remove"></span>',
+                      'options'=>array( 'class' => 'btn btn-primary btn-danger btn-xs', 'title' => 'Delete booking'),
+                      'imageUrl'=> false,
+                      'visible'=> '(Yii::app()->user->id == 1 || $data->created_by == Yii::app()->user->id)',
+                    ),
+                  ),
                 ),
               ),
               /*'pager' => array(

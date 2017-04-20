@@ -254,7 +254,7 @@ Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END
       <div class="box-footer">
         <div class="col-sm-offset-2 col-sm-5">
           <button type="submit" class="btn btn-info "><?php echo($model->isNewRecord ? 'Create' : 'Save') ?></button>
-          <button type="submit" class="btn btn-default">Cancel</button>
+          <a href="<?php echo $this->createUrl("/booking/admin"); ?>" class="btn btn-default" role="button">Cancel</a>
         </div>
       </div>
       <!-- /.box-footer -->

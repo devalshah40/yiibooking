@@ -24,17 +24,17 @@ class UserController extends Controller {
   public function accessRules() {
     return array(
       array('allow',  // allow all users to perform 'index' and 'view' actions
-        'actions' => array('index', 'view'),
-        'users' => array('*'),
-      ),
-      array('allow', // allow authenticated user to perform 'create' and 'update' actions
-        'actions' => array('create', 'update'),
+        'actions'=>array('index','view','create','update','admin','delete'),
         'users' => array('@'),
       ),
-      array('allow', // allow admin user to perform 'admin' and 'delete' actions
-        'actions' => array('admin', 'delete'),
-        'users' => array('admin'),
-      ),
+//      array('allow', // allow authenticated user to perform 'create' and 'update' actions
+//        'actions' => array('create', 'update'),
+//        'users' => array('@'),
+//      ),
+//      array('allow', // allow admin user to perform 'admin' and 'delete' actions
+//        'actions' => array('admin', 'delete'),
+//        'users' => array('admin'),
+//      ),
       array('deny',  // deny all users
         'users' => array('*'),
       ),
@@ -56,17 +56,19 @@ class UserController extends Controller {
    * If creation is successful, the browser will be redirected to the 'view' page.
    */
   public function actionCreate() {
-    $model = new User;
+    $model = new User('create');
 
     // Uncomment the following line if AJAX validation is needed
     // $this->performAjaxValidation($model);
 
     if (isset($_POST['User'])) {
       $model->attributes = $_POST['User'];
-      if ($model->save())
+      if ($model->save()) {
+        Yii::app()->user->setFlash('success', "User information is created successfully.");
         $this->redirect(array('view', 'id' => $model->id));
+      }
     }
-
+    $model->status = 1;
     $this->render('create', array(
       'model' => $model,
     ));
@@ -85,8 +87,10 @@ class UserController extends Controller {
 
     if (isset($_POST['User'])) {
       $model->attributes = $_POST['User'];
-      if ($model->save())
+      if ($model->save()) {
+        Yii::app()->user->setFlash('success', "User information is updated successfully.");
         $this->redirect(array('view', 'id' => $model->id));
+      }
     }
 
     $this->render('update', array(

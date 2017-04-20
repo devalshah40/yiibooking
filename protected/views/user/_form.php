@@ -36,20 +36,6 @@
 				</div>
 
 				<div class="form-group">
-					<?php echo $form->labelEx($model, 'password', array('class' => 'col-sm-2 control-label')); ?>
-					<div class="col-sm-5">
-						<?php echo $form->textField($model, 'password', array('size' => 60, 'maxlength' => 128, 'class' => 'form-control', 'placeholder' => "Password",'value' => '')); ?>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<?php echo $form->labelEx($model, 'password_repeat', array('class' => 'col-sm-2 control-label')); ?>
-					<div class="col-sm-5">
-						<?php echo $form->textField($model, 'password_repeat', array('size' => 60, 'maxlength' => 128, 'class' => 'form-control', 'placeholder' => "Confirm Password",'value' => '')); ?>
-					</div>
-				</div>
-
-				<div class="form-group">
 					<?php echo $form->labelEx($model, 'first_name', array('class' => 'col-sm-2 control-label')); ?>
 					<div class="col-sm-5">
 						<?php echo $form->textField($model, 'first_name', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'placeholder' => "First Name")); ?>
@@ -66,7 +52,7 @@
 				<div class="form-group">
 					<?php echo $form->labelEx($model, 'email', array('class' => 'col-sm-2 control-label')); ?>
 					<div class="col-sm-5">
-						<?php echo $form->textField($model, 'email', array('size' => 60, 'maxlength' => 128, 'class' => 'form-control', 'placeholder' => "Email")); ?>
+						<?php echo $form->emailField($model, 'email', array('size' => 60, 'maxlength' => 128, 'class' => 'form-control', 'placeholder' => "Email")); ?>
 					</div>
 				</div>
 
@@ -81,7 +67,7 @@
 				<div class="form-group">
 					<?php echo $form->labelEx($model, 'mobile_no', array('class' => 'col-sm-2 control-label')); ?>
 					<div class="col-sm-5">
-						<?php echo $form->textField($model, 'mobile_no', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'placeholder' => "Mobile no")); ?>
+						<?php echo $form->telField($model, 'mobile_no', array('size' => 60, 'maxlength' => 255, 'class' => 'form-control', 'placeholder' => "Mobile no")); ?>
 					</div>
 				</div>
 
@@ -89,9 +75,26 @@
 				<div class="form-group">
 					<?php echo $form->labelEx($model, 'status', array('class' => 'col-sm-2 control-label')); ?>
 					<div class="col-sm-5">
-						<?php echo $form->dropDownList($model, 'status', array(1 => 'Active', 0 => 'Inactive'), array('class' => 'form-control', 'placeholder' => "Status")); ?>
+						<?php echo $form->dropDownList($model, 'status', array(1 => 'Active', 0 => 'Inactive'), array('class' => 'form-control', 'placeholder' => "Status", 'prompt'=>'Select Status')); ?>
 					</div>
 				</div>
+
+
+				<div class="form-group">
+					<?php echo $form->labelEx($model, 'password', array('class' => 'col-sm-2 control-label')); ?>
+					<div class="col-sm-5">
+						<?php echo $form->passwordField($model, 'password', array('size' => 60, 'maxlength' => 128, 'class' => 'form-control', 'placeholder' => "Password",'value' => '')); ?>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<?php echo $form->labelEx($model, 'password_repeat', array('class' => 'col-sm-2 control-label')); ?>
+					<div class="col-sm-5">
+						<?php echo $form->passwordField($model, 'password_repeat', array('size' => 60, 'maxlength' => 128, 'class' => 'form-control', 'placeholder' => "Confirm Password",'value' => '')); ?>
+					</div>
+				</div>
+
+
 			</div>
 			<!-- /.box-body -->
 			<div class="box-footer">

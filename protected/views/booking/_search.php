@@ -26,7 +26,7 @@ Yii::app()->clientScript->registerScript('datePicker', $datePickerJs);
           <?php $form=$this->beginWidget('CActiveForm', array(
             'action'=>Yii::app()->createUrl($this->route),
             'enableAjaxValidation'=>false,
-            'htmlOptions' => array('class' => 'form-horizontal'),
+            'htmlOptions' => array('class' => 'form-horizontal','id' => 'search_form'),
           )); ?>
           <div class="box-body">
             <div class="form-group">
@@ -68,6 +68,15 @@ Yii::app()->clientScript->registerScript('datePicker', $datePickerJs);
               <label class="col-sm-2 control-label">Created To Date</label>
               <div class="col-sm-5">
                 <?php echo $form->textField($model,'created_to_date',array('size'=>60,'maxlength'=>255, 'class' => 'form-control datepickersearch', 'placeholder' => "To date")); ?>
+              </div>
+            </div>
+          </div>
+
+          <div class="box-body">
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Current Date</label>
+              <div class="col-sm-5">
+                <?php echo $form->textField($model,'current_date',array('size'=>60,'maxlength'=>255, 'class' => 'form-control datepickersearch', 'placeholder' => "Current date")); ?>
               </div>
             </div>
           </div>

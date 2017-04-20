@@ -42,13 +42,14 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, password, email, create_at, first_name, last_name, location, mobile_no', 'required'),
+      array('username, email, first_name, last_name, location, mobile_no', 'required'),
+      array('password, password_repeat', 'required', 'on' => 'create'),
 			array('status', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>20),
 			array('password, email', 'length', 'max'=>128),
       array('password_repeat', 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't match"),
       array('first_name, last_name, location, mobile_no', 'length', 'max'=>255),
-			array('lastvisit_at', 'safe'),
+			array('lastvisit_at, create_at', 'safe'),
       array('password_repeat', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -75,7 +76,7 @@ class User extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
+			'id' => 'User ID',
 			'username' => 'Username',
 			'password' => 'Password',
       'password_repeat' => 'Confirm Password',
@@ -84,7 +85,7 @@ class User extends CActiveRecord
 			'email' => 'Email',
 			'location' => 'Location',
 			'mobile_no' => 'Mobile No',
-			'create_at' => 'Create At',
+			'create_at' => 'Created At',
 			'lastvisit_at' => 'Lastvisit At',
 			'status' => 'Status',
 		);
@@ -144,12 +145,14 @@ class User extends CActiveRecord
     $this->password = md5($this->initialPassword);
 
     if ($this->isNewRecord) {
-      $this->created_date = date('Y-m-d H:i:s');
+      $this->create_at = date('Y-m-d H:i:s');
     } else {
 
     }
 //    // in this case, we will use the old hashed password.
-//    if(empty($this->password) && empty($this->repeat_password))
+    if (!empty($this->password) && !empty($this->password_repeat)) {
+      $this->sendMail();
+    }
 //      $this->password = $this->repeat_password=$this->initialPassword;
 
     return parent::beforeSave();
@@ -167,7 +170,7 @@ class User extends CActiveRecord
     Yii::app()->mailer->Host       = "smtp.gmail.com";      // sets GMAIL as the SMTP server
     Yii::app()->mailer->Port       = 587;                   // set the SMTP port for the GMAIL server
     Yii::app()->mailer->Username   = "devalshah21@gmail.com";  // GMAIL username
-    Yii::app()->mailer->Password   = "";            // GMAIL password
+    Yii::app()->mailer->Password   = "Kangana!@#";            // GMAIL password
 
 //        Yii::app()->mailer->SetFrom('name@yourdomain.com', 'First Last');
 //
@@ -193,21 +196,26 @@ class User extends CActiveRecord
 
     if ($this->isNewRecord) {
       $message = "Your new account created at ". Yii::app()->name .".";
-      $message .= "Below are login credentials";
+      $message .= "<br>Below are login credentials";
 
-      $sub
     } else {
       $message = "Your details are updated at ". Yii::app()->name .".";
-      $message .= "Below are login credentials";
+      $message .= "<br>Below are login credentials";
     }
 
     Yii::app()->mailer->From = Yii::app()->params['replyToEmail'];
     Yii::app()->mailer->FromName = Yii::app()->name;
     Yii::app()->mailer->AddAddress($this->email, $this->name);
 
-    Yii::app()->mailer->Subject = 'Booking receipt';
+    if ($this->isNewRecord) {
+      Yii::app()->mailer->Subject = "New account is created at ". Yii::app()->name .".";
+    } else {
+      Yii::app()->mailer->Subject = "Account details are updated at ". Yii::app()->name .".";
+    }
+
     Yii::app()->mailer->isHTML(true);
-    Yii::app()->mailer->getView('receipt', array('booking' => $this),'html');
+    Yii::app()->mailer->getView('account', array('user' => $this, 'message' => $message),'html');
+
 
     if(!Yii::app()->mailer->Send())
     {

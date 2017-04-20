@@ -26,7 +26,7 @@
           array('label' => Menu::link('Dashboard', 'fa fa-dashboard'), 'url' => array('site/index')),
           array('label' => Menu::link('Bookings', 'fa fa-dashboard'), 'url' => array('booking/admin')),
           array('label' => Menu::link('Rooms', 'fa fa-dashboard'), 'url' => array('rooms/index')),
-          array('label' => Menu::link('Search', 'fa fa-dashboard'), 'url' => array('search/index')),
+          array('label' => Menu::link('Dharamshala Search', 'glyphicon glyphicon-search'), 'url' => array('search/index')),
           array(
             'label' => Menu::link('Users', 'fa fa-dashboard'),
             'url' => array('user/admin'),

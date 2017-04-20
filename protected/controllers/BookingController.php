@@ -25,16 +25,8 @@ class BookingController extends Controller {
   public function accessRules() {
     return array(
       array('allow',  // allow all users to perform 'index' and 'view' actions
-        'actions' => array('index', 'view'),
-        'users' => array('*'),
-      ),
-      array('allow', // allow authenticated user to perform 'create' and 'update' actions
-        'actions' => array('create', 'update'),
+        'actions' => array('index', 'view','create', 'update','admin', 'delete','exportfile'),
         'users' => array('@'),
-      ),
-      array('allow', // allow admin user to perform 'admin' and 'delete' actions
-        'actions' => array('admin', 'delete'),
-        'users' => array('admin'),
       ),
       array('deny',  // deny all users
         'users' => array('*'),
@@ -80,6 +72,10 @@ class BookingController extends Controller {
    */
   public function actionUpdate($id) {
     $model = $this->loadModel($id);
+    if(!(Yii::app()->user->id == 1 || $model->created_by == Yii::app()->user->id)) {
+      Yii::app()->user->setFlash('error', "You don't have rights to update other User's booking.");
+      $this->redirect(array('admin'));
+    }
 
     // Uncomment the following line if AJAX validation is needed
     // $this->performAjaxValidation($model);
@@ -119,8 +115,14 @@ class BookingController extends Controller {
    * @param integer $id the ID of the model to be deleted
    */
   public function actionDelete($id) {
-    $this->loadModel($id)->delete();
+    $model = $this->loadModel($id);
 
+    if(!(Yii::app()->user->id == 1 || $model->created_by == Yii::app()->user->id)) {
+      Yii::app()->user->setFlash('error', "You don't have rights to delete other User's booking.");
+      $this->redirect(array('admin'));
+    }
+
+    $model->delete();
     Yii::app()->user->setFlash('success', "Booking information is deleted.");
     // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
     if (!isset($_GET['ajax']))
@@ -158,7 +160,7 @@ class BookingController extends Controller {
       Yii::app()->user->setState('pageSize',(int) $_GET['pageSize']);
     }
 
-    if(Yii::app()->request->getParam('export')) {
+    if(isset($_GET['export'])) {
         $this->actionExport();
         Yii::app()->end();
     }
@@ -176,8 +178,26 @@ class BookingController extends Controller {
 
   public function actionExport()
   {
+    // disable caching
+//    $now       = gmdate("D, d M Y H:i:s");
+//    $filename  = "booking_export.csv";
+//
+//    header("Expires: Tue, 03 Jul 2001 06:00:00 GMT");
+//    header("Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate");
+//    header("Last-Modified: {$now} GMT");
+//
+//    // force download
+//    header("Content-Type: application/force-download");
+//    header("Content-Type: application/octet-stream");
+//    header("Content-Type: application/download");
+//
+//    // disposition / encoding on response body
+//    header("Content-Disposition: attachment;filename={$filename}");
+//    header("Content-Transfer-Encoding: binary");
+
     $fp = fopen('php://temp', 'w');
- 
+//    $fp = fopen("php://output", 'w');
+//    ob_start();
     /* 
      * Write a header of csv file
      */
@@ -185,19 +205,19 @@ class BookingController extends Controller {
         'Booking ID',
         'Yatrik Name',
         'City',
-        'Pincode',
-        'Pincode',
         'Mobile No',
         'Email',
-        'Rooms',
         'Arrival Date',
         'Departure Date',
+//        'Rooms',
         'Receipt No',
         'Deposit Amount',
         'Actual Amount',
+//        'Rooms',
         'Created Date',
         'Created By'
     );
+
     fputcsv($fp,$headers);
  
     /*
@@ -209,37 +229,45 @@ class BookingController extends Controller {
         $model->attributes=$_GET['Booking'];
     }
     $dp = $model->search();
- 
+    $dp->setPagination(false);
     /*
      * Get models, write to a file, then change page and re-init DataProvider
      * with next page and repeat writing again
      */
-    while($models = $dp->getData()) {
-        foreach($models as $model) {
-            $row = array();
-            foreach($headers as $head) {
-                $row[] = CHtml::value($model,$head);
-            }
-            fputcsv($fp,$row);
-        }
- 
-        unset($model,$dp,$pg);
-        $model=new MODEL('search');
-        $model->unsetAttributes();  // clear any default values
-        if(isset($_GET['MODEL']))
-            $model->attributes=$_GET['MODEL'];
- 
-        $dp = $model->search();
-        $nextPage = $dp->getPagination()->getCurrentPage()+1;
-        $dp->getPagination()->setCurrentPage($nextPage);
+    $models = $dp->getData();
+//      var_dump($models);
+//      exit;
+    foreach($models as $model) {
+
+        $row = array();
+        $row[] = $model->id;
+        $row[] = $model->yatrik_name;
+        $row[] = $model->city;
+        $row[] = $model->mobile_no;
+        $row[] = $model->email;
+        $row[] = date('d-m-Y', strtotime($model->arrival_date));
+        $row[] = date('d-m-Y', strtotime($model->departure_date));
+
+//            foreach($model->booking_details as $key => $booking_details) {
+//                  var_dump($booking_details);exit;
+//            }
+        $row[] = $model->receipt_no;
+        $row[] = $model->deposit_amount;
+        $row[] = $model->actual_amount;
+        $row[] = date('d-m-Y', strtotime($model->created_date));
+        $row[] = $model->created->name;
+
+        fputcsv($fp,$row);
     }
- 
+
     /*
      * save csv content to a Session
      */
     rewind($fp);
     Yii::app()->user->setState('export',stream_get_contents($fp));
     fclose($fp);
+
+//    Yii::app()->user->setState('export',ob_get_clean());
   }
 
   /**
@@ -270,4 +298,27 @@ class BookingController extends Controller {
     }
   }
 
+  public function actionExportfile()
+  {
+
+    // disable caching
+    $now       = gmdate("D, d M Y H:i:s");
+    $filename  = "booking_export.csv";
+
+    header("Expires: Tue, 03 Jul 2001 06:00:00 GMT");
+    header("Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate");
+    header("Last-Modified: {$now} GMT");
+
+    // force download
+    header("Content-Type: application/force-download");
+    header("Content-Type: application/octet-stream");
+    header("Content-Type: application/download");
+
+    // disposition / encoding on response body
+    header("Content-Disposition: attachment;filename={$filename}");
+    header("Content-Transfer-Encoding: binary");
+
+    Yii::app()->request->sendFile($filename,Yii::app()->user->getState('export'));
+    Yii::app()->user->clearState('export');
+  }
 }

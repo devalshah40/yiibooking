@@ -63,6 +63,8 @@ class Booking extends CActiveRecord {
   public $departure_to_date;
   public $created_from_date;
   public $created_to_date;
+  public $current_date;
+  public $booked_room_details;
 
   /**
    * @return string the associated database table name
@@ -183,25 +185,6 @@ class Booking extends CActiveRecord {
     $criteria->compare('updated_date', $this->updated_date, true);
     $criteria->compare('updated_by', $this->updated_by);
 
-    if (!empty($this->arrival_from_date)) {
-      $criteria->addCondition('arrival_date >= "'.date('Y-m-d', strtotime($this->arrival_from_date)).'" ');
-    }
-    if (!empty($this->arrival_to_date)) {
-      $criteria->addCondition('arrival_date <= "'.date('Y-m-d', strtotime($this->arrival_to_date)).'" ');
-    }
-    if (!empty($this->departure_from_date)) {
-      $criteria->addCondition('departure_date >= "'.date('Y-m-d', strtotime($this->departure_from_date)).'" ');
-    }
-    if (!empty($this->departure_to_date)) {
-      $criteria->addCondition('departure_date <= "'.date('Y-m-d', strtotime($this->departure_to_date)).'" ');
-    }
-    if (!empty($this->created_from_date)) {
-      $criteria->addCondition('created_date >= "'.date('Y-m-d', strtotime($this->created_from_date)).'" ');
-    }
-    if (!empty($this->created_to_date)) {
-      $criteria->addCondition('created_date <= "'.date('Y-m-d', strtotime($this->created_to_date)).'" ');
-    }
-
     if (!empty($this->arrival_date)) {
       $criteria->compare('arrival_date', date('Y-m-d', strtotime($this->arrival_date)), true);
     }
@@ -209,9 +192,34 @@ class Booking extends CActiveRecord {
       $criteria->compare('departure_date', date('Y-m-d', strtotime($this->departure_date)), true);
     }
     if (!empty($this->created_date)) {
-      $criteria->compare('created_date', date('Y-m-d', strtotime($this->created_date)), true);
+      $criteria->compare('t.created_date', date('Y-m-d', strtotime($this->created_date)), true);
     }
 
+    $filter_search = false;
+    if(!empty($this->id) || !empty($this->yatrik_name) || !empty($this->city) || !empty($this->arrival_date) || !empty($this->departure_date) || !empty($this->receipt_no) || !empty($this->deposit_amount) || !empty($this->actual_amount) || !empty($this->created_by) || !empty($this->created_date) ){
+      $filter_search = true;
+    }
+
+    if(!$filter_search) {
+      if (!empty($this->arrival_from_date)) {
+        $criteria->addCondition('arrival_date >= "'.date('Y-m-d', strtotime($this->arrival_from_date)).'" ');
+      }
+      if (!empty($this->arrival_to_date)) {
+        $criteria->addCondition('arrival_date <= "'.date('Y-m-d', strtotime($this->arrival_to_date)).'" ');
+      }
+      if (!empty($this->departure_from_date)) {
+        $criteria->addCondition('departure_date >= "'.date('Y-m-d', strtotime($this->departure_from_date)).'" ');
+      }
+      if (!empty($this->departure_to_date)) {
+        $criteria->addCondition('departure_date <= "'.date('Y-m-d', strtotime($this->departure_to_date)).'" ');
+      }
+      if (!empty($this->created_from_date)) {
+        $criteria->addCondition('t.created_date >= "'.date('Y-m-d', strtotime($this->created_from_date)).'" ');
+      }
+      if (!empty($this->created_to_date)) {
+        $criteria->addCondition('t.created_date <= "'.date('Y-m-d', strtotime($this->created_to_date)).'" ');
+      }
+    }
     $pageSize = Yii::app()->user->getState('pageSize', Yii::app()->params['defaultPageSize']);
     return new CActiveDataProvider($this, array(
       'criteria' => $criteria,
@@ -269,6 +277,7 @@ class Booking extends CActiveRecord {
     foreach ($this->booking_details as $bookingDetails) {
       $this->noOfRooms[] = $bookingDetails->number_count;
       $this->rooms[] = $bookingDetails->room_id;
+      $this->booked_room_details .= $bookingDetails->number_count . " ". $bookingDetails->room->room_name ."<hr style=\"margin-bottom: 3px; margin-top: 3px;\">";
 //      $this->roomsPrices[] = $bookingDetails->room_price;
     }
     return true;
