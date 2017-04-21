@@ -170,7 +170,7 @@ class User extends CActiveRecord
     Yii::app()->mailer->Host       = "smtp.gmail.com";      // sets GMAIL as the SMTP server
     Yii::app()->mailer->Port       = 587;                   // set the SMTP port for the GMAIL server
     Yii::app()->mailer->Username   = "devalshah21@gmail.com";  // GMAIL username
-    Yii::app()->mailer->Password   = "Kangana!@#";            // GMAIL password
+    Yii::app()->mailer->Password   = "";            // GMAIL password
 
 //        Yii::app()->mailer->SetFrom('name@yourdomain.com', 'First Last');
 //
