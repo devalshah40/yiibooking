@@ -64,7 +64,7 @@ class Booking extends CActiveRecord {
   public $created_from_date;
   public $created_to_date;
   public $current_date;
-  public $booked_room_details;
+  public $booked_room_details = [];
 
   /**
    * @return string the associated database table name
@@ -97,7 +97,7 @@ class Booking extends CActiveRecord {
         'allowEmpty' => false,
         'message' => 'Deposit amount must be less than or equal to Actual amount".'
       ),
-      array('address, notes,rooms,noOfRooms, arrival_from_date, arrival_to_date, departure_from_date, departure_to_date, created_from_date, created_to_date,', 'safe'),
+      array('address, notes,rooms,noOfRooms, arrival_from_date, arrival_to_date, departure_from_date, departure_to_date, created_from_date, created_to_date,current_date', 'safe'),
       // The following rule is used by search().
       // @todo Please remove those attributes that should not be searched.
       array('id, yatrik_name, address, city, pincode, mobile_no, email, arrival_date, departure_date, receipt_no, deposit_amount, actual_amount, notes, created_date, created_by, updated_date, updated_by', 'safe', 'on' => 'search'),
@@ -201,23 +201,28 @@ class Booking extends CActiveRecord {
     }
 
     if(!$filter_search) {
-      if (!empty($this->arrival_from_date)) {
-        $criteria->addCondition('arrival_date >= "'.date('Y-m-d', strtotime($this->arrival_from_date)).'" ');
-      }
-      if (!empty($this->arrival_to_date)) {
-        $criteria->addCondition('arrival_date <= "'.date('Y-m-d', strtotime($this->arrival_to_date)).'" ');
-      }
-      if (!empty($this->departure_from_date)) {
-        $criteria->addCondition('departure_date >= "'.date('Y-m-d', strtotime($this->departure_from_date)).'" ');
-      }
-      if (!empty($this->departure_to_date)) {
-        $criteria->addCondition('departure_date <= "'.date('Y-m-d', strtotime($this->departure_to_date)).'" ');
-      }
-      if (!empty($this->created_from_date)) {
-        $criteria->addCondition('t.created_date >= "'.date('Y-m-d', strtotime($this->created_from_date)).'" ');
-      }
-      if (!empty($this->created_to_date)) {
-        $criteria->addCondition('t.created_date <= "'.date('Y-m-d', strtotime($this->created_to_date)).'" ');
+
+      if (!empty($this->current_date)) {
+        $criteria->addCondition('arrival_date <= "'.date('Y-m-d', strtotime($this->current_date)) .'" and departure_date >= "'.date('Y-m-d', strtotime($this->current_date)) .'"');
+      } else {
+        if (!empty($this->arrival_from_date)) {
+          $criteria->addCondition('arrival_date >= "'.date('Y-m-d', strtotime($this->arrival_from_date)).'" ');
+        }
+        if (!empty($this->arrival_to_date)) {
+          $criteria->addCondition('arrival_date <= "'.date('Y-m-d', strtotime($this->arrival_to_date)).'" ');
+        }
+        if (!empty($this->departure_from_date)) {
+          $criteria->addCondition('departure_date >= "'.date('Y-m-d', strtotime($this->departure_from_date)).'" ');
+        }
+        if (!empty($this->departure_to_date)) {
+          $criteria->addCondition('departure_date <= "'.date('Y-m-d', strtotime($this->departure_to_date)).'" ');
+        }
+        if (!empty($this->created_from_date)) {
+          $criteria->addCondition('t.created_date >= "'.date('Y-m-d', strtotime($this->created_from_date)).'" ');
+        }
+        if (!empty($this->created_to_date)) {
+          $criteria->addCondition('t.created_date <= "'.date('Y-m-d', strtotime($this->created_to_date)).'" ');
+        }
       }
     }
     $pageSize = Yii::app()->user->getState('pageSize', Yii::app()->params['defaultPageSize']);
@@ -277,9 +282,11 @@ class Booking extends CActiveRecord {
     foreach ($this->booking_details as $bookingDetails) {
       $this->noOfRooms[] = $bookingDetails->number_count;
       $this->rooms[] = $bookingDetails->room_id;
-      $this->booked_room_details .= $bookingDetails->number_count . " ". $bookingDetails->room->room_name ."<hr style=\"margin-bottom: 3px; margin-top: 3px;\">";
-//      $this->roomsPrices[] = $bookingDetails->room_price;
+      $this->booked_room_details[] = $bookingDetails->number_count . " ". $bookingDetails->room->room_name;
+
     }
+    // <hr style="margin-bottom: 3px; margin-top: 3px;">
+    $this->booked_room_details = implode('<hr style="margin-bottom: 3px; margin-top: 3px;">', $this->booked_room_details);
     return true;
   }
 
