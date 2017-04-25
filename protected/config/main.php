@@ -12,9 +12,9 @@ return array(
   'theme' => 'adminlte', // requires you to copy the theme under your themes directory
   'defaultController' => 'site/index',
   // preloading 'log' component
-  'preload' => array('log'
+  /*'preload' => array('log'
     //, 'booster'
-  ),
+  ),*/
   // autoloading model and component classes
   'import' => array(
     'application.models.*',
@@ -79,7 +79,7 @@ return array(
     ),*/
     // uncomment the following to enable the Gii tool
 
-    'gii' => array(
+    /*'gii' => array(
       'class' => 'system.gii.GiiModule',
       'generatorPaths' => array(
         'booster.gii',
@@ -87,7 +87,7 @@ return array(
       'password' => '123',
       // If removed, Gii defaults to localhost only. Edit carefully to taste.
 //			'ipFilters'=>array('127.0.0.1','::1'),
-    ),
+    ),*/
 
   ),
 
@@ -154,36 +154,20 @@ return array(
       'pathLayouts' => 'application.views.email.layouts'
     ),
 
-    /*'log' => array(
-      'class' => 'CLogRouter',
-      'routes' => array(
-        array(
-          'class'=>'CFileLogRoute',
-          'levels'=>'error, warning',
-        ),
-        // uncomment the following to show log messages on web pages
-
-        array(
-          'class'=>'CWebLogRoute',
-        ),
-
-      ),
-    ),*/
-
   ),
 
   // application-level parameters that can be accessed
   // using Yii::app()->params['paramName']
   'params' => array(
     // this is used in contact page
-    'adminEmail' => 'keyurgandhi@example.com',
-    'replyToEmail' => 'info@girnar.com',
-    'defaultPageSize' => 2,
-    'pageSizeOptions' => array(2=>2,10=>10,20=>20,50=>50,100=>100),
+    'adminEmail' => 'keyur.gandhi12@gmail.com',
+    'replyToEmail' => 'info@neminathheights.com',
+    'defaultPageSize' => 5,
+    'pageSizeOptions' => array(5 => 5, 10 => 10, 20 => 20, 50 => 50, 100 => 100),
     'footer_name' => 'Shree Siddhi Kailash Yatrik Bhavan',
     'footer_address' => array(
-                        'Rupaytan road,Opp. Minraj school,',
-                        'Bhavnath taleti,Junagadh'
+      'Rupaytan road,Opp. Minraj school,',
+      'Bhavnath taleti,Junagadh'
     )
   )
 );
