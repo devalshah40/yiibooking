@@ -31,10 +31,15 @@
 		<?php echo $form->textArea($model,'room_info',array('rows'=>6, 'cols'=>50)); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->label($model,'room_capacity'); ?>
-		<?php echo $form->textField($model,'room_capacity'); ?>
-	</div>
+  <div class="row">
+    <?php echo $form->label($model,'room_count'); ?>
+    <?php echo $form->textField($model,'room_count'); ?>
+  </div>
+
+  <div class="row">
+    <?php echo $form->label($model,'room_capacity'); ?>
+    <?php echo $form->textField($model,'room_capacity'); ?>
+  </div>
 
 	<div class="row">
 		<?php echo $form->label($model,'room_status'); ?>

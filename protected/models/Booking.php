@@ -398,17 +398,17 @@ class Booking extends CActiveRecord {
   }
 
   public function sendMail(){
-    Yii::app()->mailer->IsSMTP(); // telling the class to use SMTP
 //        Yii::app()->mailer->Host       = "smtp.gmail.com"; // SMTP server
 //        Yii::app()->mailer->SMTPDebug  = 2;                     // enables SMTP debug information (for testing)
     // 1 = errors and messages
     // 2 = messages only
+    Yii::app()->mailer->IsSMTP(); // telling the class to use SMTP
     Yii::app()->mailer->SMTPAuth   = true;                  // enable SMTP authentication
-    Yii::app()->mailer->SMTPSecure = "tls";                 // sets the prefix to the servier
-    Yii::app()->mailer->Host       = "sg2plcpnl0223.prod.sin2.secureserver.net";      // sets GMAIL as the SMTP server
-    Yii::app()->mailer->Port       = 465;                   // set the SMTP port for the GMAIL server
-    Yii::app()->mailer->Username   = "_mainaccount@neminathheights.com";  // GMAIL username
-    Yii::app()->mailer->Password   = "Heights@1444";            // GMAIL password
+    Yii::app()->mailer->SMTPSecure = "ssl";                 // sets the prefix to the servier
+    Yii::app()->mailer->Host       = Yii::app()->params['mailer_host'];      // sets GMAIL as the SMTP server
+    Yii::app()->mailer->Port       = Yii::app()->params['mailer_port'];                   // set the SMTP port for the GMAIL server
+    Yii::app()->mailer->Username   = Yii::app()->params['mailer_username'];  // GMAIL username
+    Yii::app()->mailer->Password   = Yii::app()->params['mailer_password'];            // GMAIL password
 
 //        Yii::app()->mailer->SetFrom('name@yourdomain.com', 'First Last');
 //

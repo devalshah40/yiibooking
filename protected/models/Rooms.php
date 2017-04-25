@@ -8,6 +8,7 @@
  * @property string $room_name
  * @property string $room_price
  * @property string $room_info
+ * @property integer $room_count
  * @property integer $room_capacity
  * @property integer $room_status
  * @property string $created_date
@@ -28,15 +29,15 @@ class Rooms extends CActiveRecord {
     // NOTE: you should only define rules for those attributes that
     // will receive user inputs.
     return array(
-      array('room_name, room_price, room_capacity', 'required'),
-      array('room_capacity, room_status', 'numerical', 'integerOnly' => true, 'min'=>1),
+      array('room_name, room_price, room_capacity, room_count', 'required'),
+      array('room_capacity, room_status, room_count', 'numerical', 'integerOnly' => true, 'min'=>1),
       array('room_price', 'numerical', 'min'=>1),
       array('room_name', 'length', 'max' => 255),
       array('room_price', 'length', 'max' => 10),
       array('room_info', 'safe'),
       // The following rule is used by search().
       // @todo Please remove those attributes that should not be searched.
-      array('room_name, room_price, room_info, room_capacity, room_status, created_date, updated_date', 'safe', 'on' => 'search'),
+      array('room_name, room_price, room_info, room_capacity, room_count, room_status, created_date, updated_date', 'safe', 'on' => 'search'),
     );
   }
 
@@ -60,6 +61,7 @@ class Rooms extends CActiveRecord {
       'room_price' => 'Room Price',
       'room_info' => 'Room Info',
       'room_capacity' => 'Room Capacity',
+      'room_count' => 'No of Rooms',
       'room_status' => 'Room Status',
       'created_date' => 'Created Date',
       'updated_date' => 'Updated Date',
@@ -95,6 +97,7 @@ class Rooms extends CActiveRecord {
     $criteria->compare('room_name', $this->room_name, true);
     $criteria->compare('room_price', $this->room_price, true);
     $criteria->compare('room_info', $this->room_info, true);
+    $criteria->compare('room_count', $this->room_count);
     $criteria->compare('room_capacity', $this->room_capacity);
     $criteria->compare('room_status', $this->room_status);
     $criteria->compare('created_date', $this->created_date, true);

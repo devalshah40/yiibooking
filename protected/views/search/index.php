@@ -27,10 +27,7 @@ function education_fields() {
    divtest.innerHTML = '<div class="form-group removeclass">          <div class="col-xs-4">                    <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]/g,\'\');" class="form-control searchrooms" placeholder="No of rooms" name="SearchForm[noOfRooms][' + room + ']">              </div>              <div class="col-xs-7"> <select class="form-control" id="search_rooms'+room+'" name="SearchForm[rooms][' + room + ']"></select>            </div>              <div class="col-xs-1" style="padding-left: 0px;">                <button type="button" class="btn btn-danger btn-flat" onclick="remove_education_fields('+ room +');">-</button>              </div>  <br>  <br>        </div>';   
    var options = $("#search_rooms > option").clone();   
    divobj = $(divtest);
-   console.log(divobj.find("#search_rooms"+room));
    divobj.find("#search_rooms"+room).append(options);
-   
-   console.log(divobj.find("#search_rooms"+room));
    objTo.appendChild(divobj[0]);
 }
 function remove_education_fields(rid) {

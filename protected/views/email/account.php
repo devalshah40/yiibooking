@@ -1,4 +1,4 @@
-<span class="preheader">This is a receipt for your booking on {{ purchase_date }}.</span>
+<span class="preheader">Account information at Girnar Dharamshala.</span>
 <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0">
   <tr>
     <td align="center">

@@ -16,7 +16,7 @@ Yii::app()->clientScript
 ?>
 <div class="login-box">
   <div class="login-logo">
-    <a href="<?php echo Yii::app()->theme->baseUrl; ?>"><?php echo CHtml::encode(Yii::app()->name); ?></a>
+    <a href="<?php echo $this->createUrl('/site/index'); ?>"><?php echo CHtml::encode(Yii::app()->name); ?></a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">

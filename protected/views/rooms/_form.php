@@ -48,6 +48,13 @@
         </div>
 
         <div class="form-group">
+          <?php echo $form->labelEx($model, 'room_count', array('class' => 'col-sm-2 control-label')); ?>
+          <div class="col-sm-5">
+            <?php echo $form->textField($model, 'room_count', array('class' => 'form-control', 'placeholder' => "No of Rooms")); ?>
+          </div>
+        </div>
+
+        <div class="form-group">
           <?php echo $form->labelEx($model, 'room_capacity', array('class' => 'col-sm-2 control-label')); ?>
           <div class="col-sm-5">
             <?php echo $form->textField($model, 'room_capacity', array('class' => 'form-control', 'placeholder' => "Room Capacity")); ?>

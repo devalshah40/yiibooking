@@ -48,6 +48,13 @@ $this->menu=array(
           </tr>
 
           <tr>
+            <th style="width: 150px"><?php echo CHtml::encode($model->getAttributeLabel('room_count')); ?></th>
+            <td>
+              <?php echo CHtml::encode($model->room_count); ?>
+            </td>
+          </tr>
+
+          <tr>
             <th style="width: 150px"><?php echo CHtml::encode($model->getAttributeLabel('room_capacity')); ?></th>
             <td>
               <?php echo CHtml::encode($model->room_capacity); ?>

@@ -144,8 +144,8 @@ return array(
     'reCaptcha' => array(
       'name' => 'reCaptcha',
       'class' => 'ext.yii-recaptcha.ReCaptcha',
-      'key' => '6LfgeBoUAAAAABLMMdL8vL6mMC23V_38QP28zLbM',
-      'secret' => '6LfgeBoUAAAAAPKm20q04QhWMcV3_qn18ekyVLGJ',
+      'key' => '6Lcblx4UAAAAAECC35gJZUVNUzGjRjzn9GBg5w24',
+      'secret' => '6Lcblx4UAAAAAJO0mmm5vP0PS5JaSJTpWo0eX6wB',
     ),
 
     'mailer' => array(
@@ -160,6 +160,11 @@ return array(
   // using Yii::app()->params['paramName']
   'params' => array(
     // this is used in contact page
+    'mailer_host' => "sg2plcpnl0223.prod.sin2.secureserver.net",
+    'mailer_port' => 465,
+    'mailer_username' => 'info@neminathheights.com',
+    'mailer_password' => '{^V=.;Q(AWV%',
+
     'adminEmail' => 'keyur.gandhi12@gmail.com',
     'replyToEmail' => 'info@neminathheights.com',
     'defaultPageSize' => 5,

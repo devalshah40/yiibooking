@@ -52,11 +52,11 @@ class ForgotForm extends CFormModel
         // 1 = errors and messages
         // 2 = messages only
         Yii::app()->mailer->SMTPAuth   = true;                  // enable SMTP authentication
-        Yii::app()->mailer->SMTPSecure = "tls";                 // sets the prefix to the servier
-        Yii::app()->mailer->Host       = "sg2plcpnl0223.prod.sin2.secureserver.net";      // sets GMAIL as the SMTP server
-        Yii::app()->mailer->Port       = 465;                   // set the SMTP port for the GMAIL server
-        Yii::app()->mailer->Username   = "_mainaccount@neminathheights.com";  // GMAIL username
-        Yii::app()->mailer->Password   = "Heights@1444";            // GMAIL password
+        Yii::app()->mailer->SMTPSecure = "ssl";                 // sets the prefix to the servier
+        Yii::app()->mailer->Host       = Yii::app()->params['mailer_host'];      // sets GMAIL as the SMTP server
+        Yii::app()->mailer->Port       = Yii::app()->params['mailer_port'];                   // set the SMTP port for the GMAIL server
+        Yii::app()->mailer->Username   = Yii::app()->params['mailer_username'];  // GMAIL username
+        Yii::app()->mailer->Password   = Yii::app()->params['mailer_password'];            // GMAIL password
 
 //        Yii::app()->mailer->SetFrom('name@yourdomain.com', 'First Last');
 //
@@ -83,16 +83,16 @@ class ForgotForm extends CFormModel
         Yii::app()->mailer->isHTML(true);
         Yii::app()->mailer->getView('forgot', array('password'=>$new_password,'user' => $user,'title' => "Reset password"),'html');
 
-//        if(!Yii::app()->mailer->Send())
-//        {
-//          echo "Mailer Error: " . Yii::app()->mailer->ErrorInfo;
-//        }
-//        else
-//        {
-//
-//          $user->password = md5($new_password);
-//          $user->save();
-//        }
+        if(!Yii::app()->mailer->Send())
+        {
+          return false;
+//          echo "Mailer Error: " . Yii::app()->mailer->ErrorInfo;exit;
+        }
+        else
+        {
+          $user->password = md5($new_password);
+          $user->save();
+        }
 
 
         return true;

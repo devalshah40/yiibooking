@@ -21,9 +21,13 @@
 	<?php echo CHtml::encode($data->room_info); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('room_capacity')); ?>:</b>
-	<?php echo CHtml::encode($data->room_capacity); ?>
-	<br />
+  <b><?php echo CHtml::encode($data->getAttributeLabel('room_count')); ?>:</b>
+  <?php echo CHtml::encode($data->room_count); ?>
+  <br />
+
+  <b><?php echo CHtml::encode($data->getAttributeLabel('room_capacity')); ?>:</b>
+  <?php echo CHtml::encode($data->room_capacity); ?>
+  <br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('room_status')); ?>:</b>
 	<?php echo CHtml::encode($data->room_status); ?>

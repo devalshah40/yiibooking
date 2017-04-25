@@ -75,42 +75,42 @@ $('#form-reset-button').click(function()
         <div class="row">
             <?php $this->widget('zii.widgets.grid.CGridView', array(
               'id' => 'rooms-grid',
-              'htmlOptions' => array('class' => 'col-sm-12'),
               'itemsCssClass' => 'table table-bordered table-striped dataTable',
               'loadingCssClass' => 'overlay-wrapper',
               'beforeAjaxUpdate'=> 'js:function(id,options){
                 $("#rooms-grid").append(\'<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>\');
               }',
-
-              'dataProvider' => $dataProvider,
+              'htmlOptions' => array('class' => 'grid-view col-sm-12'),
+//              'enableSorting' => false,
+              'enablePagination' => false,
 
               'ajaxUpdate' => 'example1_paginate',
-              'enableSorting' => false,
-              'enablePagination' => false,
-//              'summaryText'=>'Displaying {start}-{end} of {count} result(s)',
-              'pager' => array(
-                'class' => 'CLinkPager',
-                'hiddenPageCssClass' => 'paginate_button disabled',
-    //            'firstPageCssClass' => 'next hidden',
-    //            'lastPageCssClass' => 'last hidden',
-                'selectedPageCssClass' => 'active',
-                'internalPageCssClass' => 'paginate_button ',
-                'maxButtonCount'=> 6,
-                'header' => '',
-                'prevPageLabel' => 'Previous',
-                'nextPageLabel' => 'Next',
-                'firstPageLabel'=>'First',
-                'lastPageLabel'=>'Last',
-                'htmlOptions' => array(
-                  'class' => 'pagination'
-                )
-              ),
-//              'pagerCssClass' => 'dataTables_paginate paging_simple_numbers',
+              'dataProvider' => $dataProvider,
               'filter' => $model,
+//              'summaryText'=>'Displaying {start}-{end} of {count} result(s)',
+//              'pager' => array(
+//                'class' => 'CLinkPager',
+//                'hiddenPageCssClass' => 'paginate_button disabled',
+//    //            'firstPageCssClass' => 'next hidden',
+//    //            'lastPageCssClass' => 'last hidden',
+//                'selectedPageCssClass' => 'active',
+//                'internalPageCssClass' => 'paginate_button ',
+//                'maxButtonCount'=> 6,
+//                'header' => '',
+//                'prevPageLabel' => 'Previous',
+//                'nextPageLabel' => 'Next',
+//                'firstPageLabel'=>'First',
+//                'lastPageLabel'=>'Last',
+//                'htmlOptions' => array(
+//                  'class' => 'pagination'
+//                )
+//              ),
+//              'pagerCssClass' => 'dataTables_paginate paging_simple_numbers',
               'columns' => array(
                 'room_name',
                 'room_price',
                 'room_info',
+                'room_count',
                 'room_capacity',
                 array(
                   'name' => 'room_status',
