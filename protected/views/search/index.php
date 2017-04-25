@@ -24,7 +24,7 @@ function education_fields() {
    var divtest = document.createElement("div");
    divtest.setAttribute("class", "form-group removeclass"+room);
 	 var rdiv = "removeclass"+room;
-   divtest.innerHTML = '<div class="form-group removeclass">          <div class="col-xs-4">                    <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]/g,\'\');" class="form-control searchrooms" placeholder="No of rooms" name="SearchForm[noOfRooms][' + room + ']">              </div>              <div class="col-xs-7"> <select class="form-control" id="search_rooms'+room+'" name="SearchForm[rooms][' + room + ']"></select>            </div>              <div class="col-xs-1">                <button type="button" class="btn btn-danger btn-flat" onclick="remove_education_fields('+ room +');">-</button>              </div>  <br>  <br>        </div>';   
+   divtest.innerHTML = '<div class="form-group removeclass">          <div class="col-xs-4">                    <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]/g,\'\');" class="form-control searchrooms" placeholder="No of rooms" name="SearchForm[noOfRooms][' + room + ']">              </div>              <div class="col-xs-7"> <select class="form-control" id="search_rooms'+room+'" name="SearchForm[rooms][' + room + ']"></select>            </div>              <div class="col-xs-1" style="padding-left: 0px;">                <button type="button" class="btn btn-danger btn-flat" onclick="remove_education_fields('+ room +');">-</button>              </div>  <br>  <br>        </div>';   
    var options = $("#search_rooms > option").clone();   
    divobj = $(divtest);
    console.log(divobj.find("#search_rooms"+room));
@@ -99,7 +99,7 @@ Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END
                       'id' => "search_rooms"
                     )); ?>
                   </div>
-                  <div class="col-xs-1">
+                  <div class="col-xs-1" style="padding-left: 0px;">
                     <button type="button" class="btn btn-info btn-flat" onclick="education_fields();">+</button>
                   </div>
                   <br>
@@ -116,7 +116,7 @@ Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END
                           'class' => "form-control",
                         )); ?>
                       </div>
-                      <div class="col-xs-1">
+                      <div class="col-xs-1" style="padding-left: 0px;">
                         <button onclick="remove_education_fields(<?php echo $key; ?>);" class="btn btn-danger btn-flat"
                                 type="button">
                           -
@@ -142,7 +142,7 @@ Yii::app()->clientScript->registerScript('room', $roomJs, CClientScript::POS_END
                   'id' => "search_rooms"
                 )); ?>
               </div>
-              <div class="col-xs-1">
+              <div class="col-xs-1" style="padding-left: 0px;">
                 <button type="button" class="btn btn-info btn-flat" onclick="education_fields();">+</button>
               </div>
               <br>

@@ -136,7 +136,7 @@ desired effect
 <!-- jQuery 2.2.3 -->
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/jQueryUI/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button);
@@ -149,7 +149,7 @@ desired effect
 <!-- datepicker -->
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/datepicker/bootstrap-datepicker.js"></script>
 <!-- Bootstrap WYSIHTML5 -->
-<!--<script  src="<?php /*echo Yii::app()->theme->baseUrl; */?>/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>-->
+<script  src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
 <!-- FastClick -->
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->

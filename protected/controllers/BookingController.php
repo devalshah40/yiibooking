@@ -209,7 +209,7 @@ class BookingController extends Controller {
         'Email',
         'Arrival Date',
         'Departure Date',
-//        'Rooms',
+        'Rooms',
         'Receipt No',
         'Deposit Amount',
         'Actual Amount',
@@ -251,6 +251,12 @@ class BookingController extends Controller {
 //            foreach($model->booking_details as $key => $booking_details) {
 //                  var_dump($booking_details);exit;
 //            }
+        $booked_room_details = array();
+        foreach ($model->booking_details as $bookingDetails) {
+          $booked_room_details[] = $bookingDetails->number_count . " ". $bookingDetails->room->room_name;
+        }
+        $row[] = implode(',', $booked_room_details);
+
         $row[] = $model->receipt_no;
         $row[] = $model->deposit_amount;
         $row[] = $model->actual_amount;

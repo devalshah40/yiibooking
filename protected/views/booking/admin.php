@@ -181,7 +181,7 @@ Yii::app()->clientScript->registerScript('reinstallDatePicker', $reinstalldatepi
                 ),
                 'receipt_no',
                 'deposit_amount',
-                'actual_amount',
+//                'actual_amount',
                  array(
                   'name' => 'created_date',
                   'value' => 'date("d-m-Y",strtotime($data->created_date))',

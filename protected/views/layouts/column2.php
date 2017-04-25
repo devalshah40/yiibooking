@@ -23,12 +23,12 @@
         'encodeLabel' => false,
         'items' => array(
           array('label' => Menu::link('MAIN NAVIGITION'), 'itemOptions' => array('class' => 'header')),
-          array('label' => Menu::link('Dashboard', 'fa fa-dashboard'), 'url' => array('site/index')),
-          array('label' => Menu::link('Bookings', 'fa fa-dashboard'), 'url' => array('booking/admin')),
-          array('label' => Menu::link('Rooms', 'fa fa-dashboard'), 'url' => array('rooms/index')),
+          //array('label' => Menu::link('Dashboard', 'fa fa-dashboard'), 'url' => array('site/index')),
+          array('label' => Menu::link('Bookings', 'glyphicon glyphicon-list-alt'), 'url' => array('booking/admin')),
+          array('label' => Menu::link('Rooms', 'glyphicon glyphicon-home'), 'url' => array('rooms/index')),
           array('label' => Menu::link('Dharamshala Search', 'glyphicon glyphicon-search'), 'url' => array('search/index')),
           array(
-            'label' => Menu::link('Users', 'fa fa-dashboard'),
+            'label' => Menu::link('Users', 'glyphicon glyphicon-user'),
             'url' => array('user/admin'),
             'visible'=> (Yii::app()->user->id == 1)
           )
