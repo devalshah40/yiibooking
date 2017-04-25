@@ -27,20 +27,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/datepicker/datepicker3.css">
   <!-- Daterange picker -->
   <link rel="stylesheet" href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/daterangepicker/daterangepicker.css">
-  <!-- bootstrap wysihtml5 - text editor -->
-  <link rel="stylesheet"
-        href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-  <!-- Include SmartWizard CSS -->
-  <link href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/smartwizard/css/smart_wizard.css" rel="stylesheet" type="text/css" />
-
-  <!-- Optional SmartWizard theme -->
-  <link href="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/smartwizard/css/smart_wizard_theme_dots.css" rel="stylesheet" type="text/css" />
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <!--<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>-->
   <![endif]-->
 </head>
 <!--
@@ -144,7 +136,7 @@ desired effect
 <!-- jQuery 2.2.3 -->
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
-<script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/jQueryUI/jquery-ui.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button);
@@ -157,8 +149,7 @@ desired effect
 <!-- datepicker -->
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/datepicker/bootstrap-datepicker.js"></script>
 <!-- Bootstrap WYSIHTML5 -->
-<script
-  src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<!--<script  src="<?php /*echo Yii::app()->theme->baseUrl; */?>/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>-->
 <!-- FastClick -->
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
@@ -167,7 +158,7 @@ desired effect
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>-->
 
 <!-- Include SmartWizard JavaScript source -->
-<script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/smartwizard/js/jquery.smartWizard.min.js"></script>
+<!--<script type="text/javascript" src="<?php /*echo Yii::app()->theme->baseUrl; */?>/plugins/smartwizard/js/jquery.smartWizard.min.js"></script>-->
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
