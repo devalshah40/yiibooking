@@ -1,8 +1,8 @@
 <?php
 $daterange = "$('#daterange').daterangepicker({ 
-  startDate: '".date('d-m-Y')."',
-  endDate: '".date('d-m-Y',strtotime('+2 days'))."',
-  minDate: '".date('d-m-Y')."',
+  startDate: '".date('d-m-Y', strtotime($model->startDate))."',
+  endDate: '".date('d-m-Y', strtotime($model->endDate))."',
+  minDate: '".date('d-m-Y', strtotime($model->startDate))."',
   locale: {
         format: 'DD-MM-YYYY'
   }

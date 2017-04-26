@@ -18,6 +18,13 @@ class SearchForm extends CFormModel {
   public $total_booking_price;
   public $book_button;
 
+  public function init()
+  {
+    $this->dateRange = date('d-m-Y') ." - " . date('d-m-Y',strtotime('+2 days'));
+    $this->startDate = date('d-m-Y');
+    $this->endDate = date('d-m-Y',strtotime('+2 days'));
+  }
+
   protected function beforeValidate() {
     if(!empty($this->dateRange)) {
       list($this->startDate, $this->endDate) = explode(' - ', $this->dateRange);
@@ -47,7 +54,7 @@ class SearchForm extends CFormModel {
       array('dateRange, noOfRooms, rooms', 'required'),
       array('startDate, endDate', 'date','format' => array('yyyy-MM-dd')),
       array('noOfRooms', 'checkIntegerValid'),
-      array('book_button', 'safe'),
+      array('book_button, dateRange', 'safe'),
     );
   }
 
