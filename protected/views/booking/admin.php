@@ -124,7 +124,7 @@ Yii::app()->clientScript->registerScript('reinstallDatePicker', $reinstalldatepi
               'beforeAjaxUpdate'=> 'js:function(id,options){
                 $("#booking-grid").append(\'<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>\');
               }',
-              'htmlOptions' => array('class' => 'grid-view col-sm-12'),
+              'htmlOptions' => array('class' => 'grid-view col-sm-12','style' => 'overflow-x: auto;'),
               'enablePagination' => false,
 
               'ajaxUpdate' => 'example1_paginate',
