@@ -86,8 +86,11 @@ class SearchForm extends CFormModel {
               `booking` b 
               INNER JOIN `booking_details` bd 
                 ON b.id = bd.`booking_id` 
-                AND b.`arrival_date` = :startDate 
-                AND b.`departure_date` = :endDate AND FIND_IN_SET (bd.`room_id`, :rooms)
+                AND (
+                   (  b.`arrival_date`  <= :startDate  AND  b.`departure_date` > :startDate )
+                   OR ( b.`arrival_date`  < :endDate  AND  b.`departure_date` > :endDate )
+                   OR ( b.`arrival_date`  >= :startDate  AND  b.`departure_date` <= :endDate )
+                 ) AND FIND_IN_SET (bd.`room_id`, :rooms)
             RIGHT JOIN (SELECT * FROM rooms r WHERE FIND_IN_SET (r.`id`, :rooms)) r ON bd.`room_id` = r.`id` 
             GROUP BY
                 r.id
@@ -95,6 +98,7 @@ class SearchForm extends CFormModel {
                 r.id";
 
     $command = Yii::app()->db->createCommand($sql);
+
     $command->bindParam(":startDate",$this->startDate,PDO::PARAM_STR);
     $command->bindParam(":endDate",$this->endDate,PDO::PARAM_STR);
     $rooms_str = implode(',', $this->rooms);

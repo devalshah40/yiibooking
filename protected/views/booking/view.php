@@ -176,9 +176,11 @@ $this->breadcrumbs = array(
         </table>
       </div>
       <!-- /.box-body -->
+
       <!-- /.box-body -->
-      <div class="box-footer">
+      <div class="box-footer hidden-print">
         <div class="col-sm-offset-2 col-sm-5">
+          <a class="btn btn-default" target="_blank" href="<?php echo Yii::app()->request->requestUri; ?>" onclick="return window.print();"><i class="fa fa-print"></i> Print</a>
           <a href="<?php echo $this->createUrl("/booking/admin"); ?>" class="btn btn-info" role="button">Back</a>
         </div>
       </div>

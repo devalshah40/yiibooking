@@ -116,7 +116,7 @@ desired effect
   <?php echo $content; ?>
 
   <!-- Main Footer -->
-  <footer class="main-footer">
+  <footer class="main-footer hidden-print">
     <!-- To the right -->
     <div class="pull-right hidden-xs">
       Anything you want

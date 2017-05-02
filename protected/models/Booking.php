@@ -82,7 +82,8 @@ class Booking extends CActiveRecord {
     return array(
       array('yatrik_name, address, city, pincode, mobile_no, email, arrival_date, departure_date, receipt_no, deposit_amount, actual_amount', 'required'),
       array('arrival_date, departure_date', 'date', 'format' => array('yyyy-MM-dd')),
-      array('mobile_no, pincode, receipt_no', 'numerical', 'integerOnly' => true),
+      array('mobile_no, pincode', 'numerical', 'integerOnly' => true),
+      array('receipt_no', 'match' ,'pattern'=>'/^[A-Za-z0-9]+$/u','message'=> 'Receipt no should contain only Numbers and letters.'),
       array('deposit_amount, actual_amount', 'numerical'),
       array('mobile_no', 'length', 'min' => 10, 'max' => 10),
       array('email', 'email'),
