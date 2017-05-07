@@ -28,7 +28,7 @@ class RoomsController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','create','update','admin','delete'),
+				'actions'=>array('index','view','create','update','admin','delete','search'),
 				'users'=>array('@'),
 			),
 			array('deny',  // deny all users
@@ -186,4 +186,35 @@ class RoomsController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+  /**
+   * Displays the forgot password page
+   */
+  public function actionSearch() {
+    $model = new AvailableroomForm();
+
+    if (Yii::app()->request->isPostRequest) {
+//      var_dump($_POST);
+//      exit;
+      $model->startDate = $_POST['AvailableroomForm']['startDate'];
+      $model->endDate = $_POST['AvailableroomForm']['endDate'];
+//      var_dump($model);exit;
+      $bookings = $model->findRoomBookings();
+
+      if (!empty($bookings)) {
+//        var_dump($bookings);exit;
+        foreach ($bookings as $booking) {
+          $events[] = array(
+            'title' => $booking['yatrik_name'],
+            'start' => $booking['arrival_date'],
+            'end' => date('Y-m-d', strtotime('0 day',strtotime($booking['departure_date']))),
+            'url' => $this->createUrl('booking/view',array('id' => $booking['booking_id']))
+          );
+        }
+      }
+      echo CJSON::encode($events);
+    }
+
+    $this->render('search', array('model' => $model));
+  }
 }

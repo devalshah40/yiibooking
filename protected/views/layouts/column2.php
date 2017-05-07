@@ -23,9 +23,10 @@
         'encodeLabel' => false,
         'items' => array(
           array('label' => Menu::link('MAIN NAVIGITION'), 'itemOptions' => array('class' => 'header')),
-          //array('label' => Menu::link('Dashboard', 'fa fa-dashboard'), 'url' => array('site/index')),
+          array('label' => Menu::link('Dashboard', 'fa fa-dashboard'), 'url' => array('site/calendar')),
           array('label' => Menu::link('Bookings', 'glyphicon glyphicon-list-alt'), 'url' => array('booking/admin')),
           array('label' => Menu::link('Rooms', 'glyphicon glyphicon-home'), 'url' => array('rooms/index')),
+//          array('label' => Menu::link('Available Rooms', 'glyphicon glyphicon-home'), 'url' => array('rooms/search')),
           array('label' => Menu::link('Dharamshala Search', 'glyphicon glyphicon-search'), 'url' => array('search/index')),
           array(
             'label' => Menu::link('Users', 'glyphicon glyphicon-user'),

@@ -10,8 +10,8 @@ class SearchForm extends CFormModel {
   public $startDate;
   public $endDate;
   public $noOfDays;
-  public $noOfRooms;
-  public $rooms;
+  public $noOfRooms = array();
+  public $rooms = array();
   public $searchRooms;
   public $bookedRooms;
   public $is_bookable;
@@ -176,5 +176,37 @@ class SearchForm extends CFormModel {
 //    var_dump($this->noOfRooms);
 //    var_dump($this->rooms);
 //    exit;
+  }
+
+  public function searchBookings() {
+
+    $sql = "SELECT 
+              b.`id`,	
+              b.`yatrik_name`,
+              b.`arrival_date`,
+              b.`departure_date`,
+              bd.`room_id`,
+              bd.`number_count` ,
+              bd.`booking_id` ,
+              GROUP_CONCAT(bd.`number_count`,' ',r.`room_name`) AS 'room_details'
+            FROM
+              `booking` b 
+              INNER JOIN `booking_details` bd 
+                ON b.id = bd.`booking_id` 
+                AND ( b.`arrival_date`  >= :startDate  AND  b.`departure_date` <= :endDate )
+              INNER JOIN rooms r ON r.`id` = bd.`room_id`
+            GROUP BY 
+              b.`id`
+			";
+
+    $command = Yii::app()->db->createCommand($sql);
+
+    $command->bindParam(":startDate",$this->startDate,PDO::PARAM_STR);
+    $command->bindParam(":endDate",$this->endDate,PDO::PARAM_STR);
+
+//    $command->bindParam(":rooms",$rooms_str,PDO::PARAM_STR);
+
+    $results = $command->queryAll();
+    return $results;
   }
 }

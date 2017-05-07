@@ -156,6 +156,88 @@ class SiteController extends Controller {
   }
 
   /**
+   * Displays the forgot password page
+   */
+  public function actionCalendar() {
+    $model = new SearchForm();
+
+    if (Yii::app()->request->isAjaxRequest) {
+//      $model->dateRange = date('01-m-Y') ." - " . date('t-m-Y');
+      $model->startDate = Yii::app()->request->getPost('start');
+      $model->endDate = Yii::app()->request->getPost('end');
+
+
+      $roomsResult = Rooms::model()->findAll(array(
+        'condition' => 'room_status=:status',
+        'params' => array(':status' => 1)
+      ));
+
+      $rooms = array();
+      foreach ($roomsResult as $room) {
+        $room_count = $room->room_count;
+        $room_name = $room->room_name;
+        $rooms[$room->id] = array(
+          'room_count' => $room_count,
+          'room_name' => $room_name
+        );
+      }
+
+      $begin = new DateTime( $model->startDate );
+      $end = new DateTime( $model->endDate );
+
+      $availableRooms = array();
+      for($i = $begin; $i <= $end; $i->modify('+1 day')){
+        $booked_date = $i->format("Y-m-d");
+        $availableRooms[$booked_date] = $rooms;
+      }
+
+######################################################################
+      $bookings = $model->searchBookings();
+
+      $events = array();
+      if (!empty($bookings)) {
+//        var_dump($bookings);exit;
+        foreach ($bookings as $booking) {
+
+          $begin = new DateTime( $booking['arrival_date'] );
+          $end = new DateTime( $booking['departure_date'] );
+
+          for($i = $begin; $i < $end; $i->modify('+1 day')){
+            $booked_date = $i->format("Y-m-d");
+            $roomsBooked = &$availableRooms[$booked_date][$booking['room_id']];
+            $roomsBooked['room_count'] -= $booking['number_count'];
+          }
+//          'title' => $booking['yatrik_name'],
+          $events[] = array(
+            'title' => $booking['yatrik_name'] .' - '.$booking['room_details'],
+            'start' => $booking['arrival_date'],
+            'end' => $booking['departure_date'],
+            'url' => $this->createUrl('booking/view',array('id' => $booking['booking_id'])),
+            'color' => 'green'
+          );
+        }
+      }
+//      $events = array_values($events);
+
+      foreach ($availableRooms as $date => $availableRoom) {
+        foreach ($availableRoom as $room) {
+          if($room['room_count'] > 0) {
+            $events[] = array(
+              'title' => $room['room_count'] .' '. $room['room_name'],
+              'start' => $date,
+              'end' => date("Y-m-d", strtotime($date)+86400),
+              'color' => 'orange'
+            );
+          }
+        }
+      }
+      echo CJSON::encode($events);
+    } else {
+      $this->render('calendar', array('model' => $model));
+    }
+  }
+
+  /**
    * Logs out the current user and redirect to homepage.
    */
   public function actionLogout() {

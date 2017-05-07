@@ -143,6 +143,7 @@ desired effect
 </script>
 <!-- Bootstrap 3.3.6 -->
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/bootstrap/js/bootstrap.min.js"></script>
+
 <!-- daterangepicker -->
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/daterangepicker/moment.min.js"></script>
 <script src="<?php echo Yii::app()->theme->baseUrl; ?>/plugins/daterangepicker/daterangepicker.js"></script>
